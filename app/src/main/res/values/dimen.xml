@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="info_text_view">16sp</dimen>
+    <dimen name="names_text_view">20sp</dimen>
+    <dimen name="margin_elements">2dp</dimen>
+</resources>

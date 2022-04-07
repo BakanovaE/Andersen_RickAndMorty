@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.MaterialComponents.DayNight.DarkActionBar.Launcher" >
+
+        <item name="android:windowBackground">@drawable/rickmorty</item>
+
+    </style>
+
+
+</resources>
