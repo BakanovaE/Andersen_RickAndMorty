@@ -70,11 +70,14 @@ class FragmentEpisodes: Fragment() {
         binding.filterButtonEpisodes.setOnClickListener {
             FragmentFilterEpisodes.newInstance(filter)
                 .show(childFragmentManager, "EpisodesDialog")
-
         }
         binding.swipeRefreshLayoutEpisodes.setOnRefreshListener {
             viewModelEpisodes.getFilteredEpisodes(filter)
             binding.swipeRefreshLayoutEpisodes.isRefreshing = false
+        }
+        binding.clearFilterButtonEpisodes.setOnClickListener {
+            filter = EpisodesFilter("", "")
+            viewModelEpisodes.getFilteredEpisodes(filter)
         }
     }
 

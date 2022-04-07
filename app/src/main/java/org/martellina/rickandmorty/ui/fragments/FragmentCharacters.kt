@@ -73,6 +73,11 @@ class FragmentCharacters: Fragment(R.layout.fragment_characters) {
             viewModelCharacters.getFilteredCharacters(filter)
             binding.swipeRefreshLayoutCharacters.isRefreshing = false
         }
+
+        binding.clearFilterButtonCharacters.setOnClickListener {
+            filter = CharactersFilter("", "", "", "", "")
+            viewModelCharacters.getFilteredCharacters(filter)
+        }
     }
 
     private fun observeLiveData() {

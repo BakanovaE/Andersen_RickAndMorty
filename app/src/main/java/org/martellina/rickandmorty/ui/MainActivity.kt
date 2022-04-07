@@ -1,5 +1,7 @@
 package org.martellina.rickandmorty.ui
 
+import android.content.Context
+import android.net.ConnectivityManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -45,5 +47,10 @@ class MainActivity : AppCompatActivity(), Navigator {
 
     override fun goBack() {
         onBackPressed()
+    }
+
+    private fun isConnected(): Boolean? {
+        val connectivityManager = applicationContext.getSystemService( Context.CONNECTIVITY_SERVICE ) as ConnectivityManager
+        return connectivityManager.activeNetworkInfo?.isConnected
     }
 }

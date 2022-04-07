@@ -76,6 +76,11 @@ class FragmentLocations: Fragment() {
             viewModelLocations.getFilteredLocations(filter)
             binding.swipeRefreshLayoutLocations.isRefreshing = false
         }
+
+        binding.clearFilterButtonLocations.setOnClickListener {
+            filter = LocationsFilter("", "", "")
+            viewModelLocations.getFilteredLocations(filter)
+        }
     }
 
     private fun observeLiveData() {

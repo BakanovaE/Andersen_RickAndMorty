@@ -48,18 +48,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_view_episode_air_date" />
 
-        <ImageButton
+        <Button
             android:id="@+id/buttonBack"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:background="@color/white"
-            android:scaleType="centerInside"
+            android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@drawable/back"
-            android:layout_marginBottom="8dp"/>
-
+            android:text="@string/back"
+            android:textSize="12sp"/>
 
         <ProgressBar
             android:id="@+id/progress_bar"
