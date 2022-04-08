@@ -1,7 +1,6 @@
-package org.martellina.rickandmorty.network
+package org.martellina.rickandmorty.data
 
 import android.content.Context
-import org.martellina.rickandmorty.data.Database
 import org.martellina.rickandmorty.data.mappers.CharacterMapper
 import org.martellina.rickandmorty.data.mappers.EpisodeMapper
 import org.martellina.rickandmorty.data.mappers.LocationMapper
@@ -10,17 +9,17 @@ import org.martellina.rickandmorty.network.model.*
 import retrofit2.await
 import java.lang.Exception
 
-class Repository private constructor(context: Context){
+class RepositoryImpl private constructor(context: Context): Repository{
 
     companion object {
-        private var INSTANCE: Repository? = null
+        private var INSTANCE: RepositoryImpl? = null
         fun initialize(context: Context) {
             if (INSTANCE == null) {
-                INSTANCE = Repository(context)
+                INSTANCE = RepositoryImpl(context)
             }
         }
 
-        fun get(): Repository {
+        fun get(): RepositoryImpl {
             return INSTANCE ?: throw IllegalStateException("Repository should be initialized")
         }
     }
@@ -39,7 +38,7 @@ class Repository private constructor(context: Context){
     private val charactersApi = Common.charactersApi
     private val locationsApi = Common.locationsApi
 
-    suspend fun getAllEpisodes(page: Int, filter: EpisodesFilter): Episodes? {
+    override suspend fun getAllEpisodes(page: Int, filter: EpisodesFilter): Episodes? {
         var result: Episodes?
         try {
             result = episodesApi.getAllEpisodes(page, filter.name, filter.code).await()
@@ -53,7 +52,7 @@ class Repository private constructor(context: Context){
         return result
     }
 
-    suspend fun getFilteredEpisodes(filter: EpisodesFilter): Episodes? {
+    override suspend fun getFilteredEpisodes(filter: EpisodesFilter): Episodes? {
         val result: Episodes? = try {
             episodesApi.getFilteredEpisodes(filter.name, filter.code).await()
         } catch (e: Exception) {
@@ -63,7 +62,7 @@ class Repository private constructor(context: Context){
         return result
     }
 
-    suspend fun getCharacterById(id: Int): CharacterInfo? {
+    override suspend fun getCharacterById(id: Int): CharacterInfo? {
         val result: CharacterInfo? = try {
             charactersApi.getCharacterById(id).await()
         } catch (e :Exception) {
@@ -72,7 +71,7 @@ class Repository private constructor(context: Context){
         return result
     }
 
-    suspend fun getAllCharacters(page: Int, filter: CharactersFilter) : Characters? {
+    override suspend fun getAllCharacters(page: Int, filter: CharactersFilter) : Characters? {
         var result: Characters?
         try {
             result = charactersApi.getAllCharacters(page, filter.name, filter.status, filter.species, filter.type, filter.gender).await()
@@ -86,7 +85,7 @@ class Repository private constructor(context: Context){
         return result
     }
 
-    suspend fun getEpisodeById(id: Int): EpisodeInfo? {
+    override suspend fun getEpisodeById(id: Int): EpisodeInfo? {
         val result: EpisodeInfo? = try {
             episodesApi.getEpisodeById(id).await()
         } catch (e: Exception) {
@@ -95,7 +94,7 @@ class Repository private constructor(context: Context){
         return result
     }
 
-    suspend fun getLocationById(id: Int): LocationInfo? {
+    override suspend fun getLocationById(id: Int): LocationInfo? {
         val result: LocationInfo? = try {
             locationsApi.getLocationById(id).await()
         } catch (e: Exception) {
@@ -104,7 +103,7 @@ class Repository private constructor(context: Context){
         return result
     }
 
-    suspend fun getAllLocations(page: Int, filter: LocationsFilter) : Locations? {
+    override suspend fun getAllLocations(page: Int, filter: LocationsFilter) : Locations? {
         var result: Locations?
         try {
             result = locationsApi.getAllLocations(page, filter.name, filter.type, filter.dimension).await()
@@ -118,7 +117,7 @@ class Repository private constructor(context: Context){
         return result
     }
 
-    suspend fun getFilteredLocations(filter: LocationsFilter): Locations? {
+    override suspend fun getFilteredLocations(filter: LocationsFilter): Locations? {
         val result: Locations? = try {
             locationsApi.getFilteredLocations(filter.name, filter.type, filter.dimension).await()
         } catch (e: Exception) {
@@ -128,7 +127,7 @@ class Repository private constructor(context: Context){
         return result
     }
 
-    suspend fun getFilteredCharacters(filter: CharactersFilter): Characters? {
+    override suspend fun getFilteredCharacters(filter: CharactersFilter): Characters? {
         val result: Characters? = try {
             charactersApi.getFilteredCharacters(filter.name, filter.status, filter.species, filter.type, filter.gender).await()
         } catch (e: Exception) {

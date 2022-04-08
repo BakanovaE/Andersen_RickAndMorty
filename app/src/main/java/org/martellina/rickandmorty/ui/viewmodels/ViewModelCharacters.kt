@@ -1,15 +1,16 @@
 package org.martellina.rickandmorty.ui.viewmodels
 
-import android.util.Log
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.martellina.rickandmorty.network.Repository
+import org.martellina.rickandmorty.data.Repository
+import org.martellina.rickandmorty.data.RepositoryImpl
 import org.martellina.rickandmorty.network.model.CharacterInfo
 import org.martellina.rickandmorty.network.model.CharactersFilter
-import org.martellina.rickandmorty.network.model.LocationInfo
+import javax.inject.Inject
 
 class ViewModelCharacters: ViewModel() {
 
@@ -18,8 +19,8 @@ class ViewModelCharacters: ViewModel() {
     var pages = MutableLiveData<Int>()
     var isEmpty = MutableLiveData<Boolean>()
 
+    val repository = RepositoryImpl.get()
 
-    private val repository = Repository.get()
 
     fun getAllCharacters(page: Int, filter: CharactersFilter) {
         isLoading.value = true

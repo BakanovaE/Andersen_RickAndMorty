@@ -2,21 +2,23 @@ package org.martellina.rickandmorty.ui.fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import org.martellina.rickandmorty.appComponent
 import org.martellina.rickandmorty.databinding.FragmentEpisodesBinding
+import org.martellina.rickandmorty.di.factory.ViewModelEpisodesFactory
 import org.martellina.rickandmorty.network.model.EpisodeInfo
 import org.martellina.rickandmorty.network.model.EpisodesFilter
 import org.martellina.rickandmorty.ui.Navigator
 import org.martellina.rickandmorty.ui.adapters.AdapterEpisodes
 import org.martellina.rickandmorty.ui.viewmodels.ViewModelEpisodes
+import javax.inject.Inject
 
 class FragmentEpisodes: Fragment() {
 
@@ -25,16 +27,20 @@ class FragmentEpisodes: Fragment() {
             episode -> val fragmentEpisodeDetail = FragmentEpisodeDetail.newInstance(episode)
         navigator.navigate(fragmentEpisodeDetail)
     }
-    private lateinit var recyclerViewEpisodes: RecyclerView
-    private lateinit var layoutManager: StaggeredGridLayoutManager
     private var episodesList = ArrayList<EpisodeInfo>()
-    private lateinit var viewModelEpisodes: ViewModelEpisodes
     private lateinit var navigator: Navigator
     private var filter = EpisodesFilter()
     private var page = 1
     private var pages = 1
 
+    @Inject
+    lateinit var factory: ViewModelEpisodesFactory
+
+    val viewModelEpisodes by viewModels<ViewModelEpisodes>(factoryProducer = { factory })
+
     override fun onAttach(context: Context) {
+        context.appComponent.inject(this)
+
         super.onAttach(context)
 
         if(context is Navigator) {
@@ -56,40 +62,27 @@ class FragmentEpisodes: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        recyclerViewEpisodes = binding.recyclerviewEpisodes
-        initializeRecyclerView()
-
-        viewModelEpisodes = ViewModelProvider(this)[ViewModelEpisodes::class.java]
-        observeLiveData()
-
         if (episodesList.isNullOrEmpty()) {
             page = 1
             viewModelEpisodes.getAllEpisodes(page, filter)
         }
 
-        binding.filterButtonEpisodes.setOnClickListener {
-            FragmentFilterEpisodes.newInstance(filter)
-                .show(childFragmentManager, "EpisodesDialog")
-        }
-        binding.swipeRefreshLayoutEpisodes.setOnRefreshListener {
-            viewModelEpisodes.getFilteredEpisodes(filter)
-            binding.swipeRefreshLayoutEpisodes.isRefreshing = false
-        }
-        binding.clearFilterButtonEpisodes.setOnClickListener {
-            filter = EpisodesFilter("", "")
-            viewModelEpisodes.getFilteredEpisodes(filter)
-        }
+        initializeRecyclerView()
+        initializePagination()
+        initializeButtons()
+        initializeSwipeRefreshLayout()
+        observeLiveData()
     }
 
     private fun initializeRecyclerView() {
-        layoutManager = StaggeredGridLayoutManager(2, 1)
-        recyclerViewEpisodes.layoutManager = layoutManager
-        recyclerViewEpisodes.adapter = adapterEpisodes
-        initializePagination()
+        with(binding) {
+            recyclerviewEpisodes.layoutManager = StaggeredGridLayoutManager(2, 1)
+            recyclerviewEpisodes.adapter = adapterEpisodes
+        }
     }
 
     private fun initializePagination() {
-        recyclerViewEpisodes.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        binding.recyclerviewEpisodes.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 if (!recyclerView.canScrollVertically(1) and (page < pages)) {
@@ -98,6 +91,25 @@ class FragmentEpisodes: Fragment() {
                 }
             }
         })
+    }
+
+    private fun initializeSwipeRefreshLayout() {
+        binding.swipeRefreshLayoutEpisodes.setOnRefreshListener {
+            viewModelEpisodes.getFilteredEpisodes(filter)
+            binding.swipeRefreshLayoutEpisodes.isRefreshing = false
+        }
+    }
+
+    private fun initializeButtons() {
+        binding.filterButtonEpisodes.setOnClickListener {
+            FragmentFilterEpisodes.newInstance(filter)
+                .show(childFragmentManager, "EpisodesDialog")
+        }
+
+        binding.clearFilterButtonEpisodes.setOnClickListener {
+            filter = EpisodesFilter("", "")
+            viewModelEpisodes.getFilteredEpisodes(filter)
+        }
     }
 
     private fun observeLiveData() {

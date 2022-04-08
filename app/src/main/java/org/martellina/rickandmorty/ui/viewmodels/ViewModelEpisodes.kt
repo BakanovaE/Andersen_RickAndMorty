@@ -1,17 +1,17 @@
 package org.martellina.rickandmorty.ui.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import okhttp3.Dispatcher
-import org.martellina.rickandmorty.network.Repository
+import org.martellina.rickandmorty.data.Repository
+import org.martellina.rickandmorty.data.RepositoryImpl
 import org.martellina.rickandmorty.network.model.EpisodeInfo
 import org.martellina.rickandmorty.network.model.EpisodesFilter
+import javax.inject.Inject
 
-class ViewModelEpisodes : ViewModel() {
+class ViewModelEpisodes: ViewModel() {
 
     var episodesList = MutableLiveData<List<EpisodeInfo>>()
     var isLoading = MutableLiveData<Boolean>()
@@ -19,14 +19,14 @@ class ViewModelEpisodes : ViewModel() {
     var filter = EpisodesFilter()
     var isEmpty = MutableLiveData<Boolean>()
 
-    private val repository = Repository.get()
+    val repository = RepositoryImpl.get()
 
     fun getAllEpisodes(page: Int, filter: EpisodesFilter) {
         isLoading.value = true
         viewModelScope.launch(Dispatchers.IO) {
             val result = repository.getAllEpisodes(page, filter)
             launch(Dispatchers.Main) {
-                updateLiveData(result?.results, filter)
+                updateEpisodesList(result?.results, filter)
                 updatePages(result?.info?.pages)
             }
         }
@@ -47,8 +47,7 @@ class ViewModelEpisodes : ViewModel() {
         }
     }
 
-    private fun updateLiveData(list: List<EpisodeInfo>?, filter: EpisodesFilter) {
-        if(filter.name.isNullOrEmpty() || filter.code.isNullOrEmpty()) {
+    private fun updateEpisodesList(list: List<EpisodeInfo>?, filter: EpisodesFilter) {
             if (episodesList.value.isNullOrEmpty()) {
                 episodesList.value = list
             } else {
@@ -58,9 +57,6 @@ class ViewModelEpisodes : ViewModel() {
                     }
                 }
             }
-        } else {
-            episodesList.value = list
-        }
         isLoading.value = false
     }
 
@@ -72,6 +68,5 @@ class ViewModelEpisodes : ViewModel() {
     private fun updatePages(pages: Int?) {
         this.pages.value = pages
     }
-
 }
 

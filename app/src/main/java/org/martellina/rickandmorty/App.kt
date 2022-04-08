@@ -1,19 +1,30 @@
 package org.martellina.rickandmorty
 
 import android.app.Application
-import org.martellina.rickandmorty.network.Repository
+import android.content.Context
 import org.martellina.rickandmorty.di.AppComponent
+import org.martellina.rickandmorty.di.AppModule
 import org.martellina.rickandmorty.di.DaggerAppComponent
+import org.martellina.rickandmorty.data.RepositoryImpl
 
 class App: Application() {
 
     lateinit var appComponent: AppComponent
+        private set
 
     override fun onCreate() {
         super.onCreate()
-        Repository.initialize(this)
 
-        appComponent = DaggerAppComponent.create()
+        val repository = RepositoryImpl.initialize(this)
+
+        appComponent = DaggerAppComponent.builder()
+            .appModule(AppModule(context = this))
+            .build()
     }
-
 }
+
+val Context.appComponent: AppComponent
+    get() = when (this) {
+        is App -> appComponent
+        else -> applicationContext.appComponent
+    }

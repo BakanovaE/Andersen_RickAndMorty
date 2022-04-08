@@ -5,9 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.martellina.rickandmorty.network.Repository
+import org.martellina.rickandmorty.data.Repository
+import org.martellina.rickandmorty.data.RepositoryImpl
 import org.martellina.rickandmorty.network.model.CharacterInfo
 import org.martellina.rickandmorty.network.model.EpisodeInfo
+import javax.inject.Inject
 
 class ViewModelCharacter: ViewModel() {
 
@@ -15,7 +17,7 @@ class ViewModelCharacter: ViewModel() {
     var episodesListLiveData = MutableLiveData<List<EpisodeInfo>>()
     var isLoading = MutableLiveData<Boolean>()
 
-    private val repository = Repository.get()
+    val repository = RepositoryImpl.get()
 
     fun getCharacterById(id: Int) {
         isLoading.value = true

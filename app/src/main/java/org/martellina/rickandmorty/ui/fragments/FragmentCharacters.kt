@@ -2,22 +2,25 @@ package org.martellina.rickandmorty.ui.fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import org.martellina.rickandmorty.R
+import org.martellina.rickandmorty.appComponent
 import org.martellina.rickandmorty.databinding.FragmentCharactersBinding
+import org.martellina.rickandmorty.di.factory.ViewModelCharactersFactory
+import org.martellina.rickandmorty.di.factory.ViewModelEpisodesFactory
 import org.martellina.rickandmorty.network.model.CharacterInfo
 import org.martellina.rickandmorty.network.model.CharactersFilter
 import org.martellina.rickandmorty.ui.Navigator
 import org.martellina.rickandmorty.ui.adapters.AdapterCharacters
 import org.martellina.rickandmorty.ui.viewmodels.ViewModelCharacters
+import javax.inject.Inject
 
 class FragmentCharacters: Fragment(R.layout.fragment_characters) {
 
@@ -26,13 +29,19 @@ class FragmentCharacters: Fragment(R.layout.fragment_characters) {
     private lateinit var recyclerViewCharacters: RecyclerView
     private lateinit var layoutManager: StaggeredGridLayoutManager
     private var charactersList = ArrayList<CharacterInfo>()
-    private lateinit var viewModelCharacters: ViewModelCharacters
+//    private lateinit var viewModelCharacters: ViewModelCharacters
     private lateinit var navigator: Navigator
     private var filter = CharactersFilter()
     private var page = 1
     private var pages = 1
 
+    @Inject
+    lateinit var factory: ViewModelCharactersFactory
+
+    val viewModelCharacters by viewModels<ViewModelCharacters>(factoryProducer = { factory })
+
     override fun onAttach(context: Context) {
+        context.appComponent.inject(this)
         super.onAttach(context)
         if (context is Navigator) {
             navigator = context
@@ -53,7 +62,7 @@ class FragmentCharacters: Fragment(R.layout.fragment_characters) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModelCharacters = ViewModelProvider(this)[ViewModelCharacters::class.java]
+//        viewModelCharacters = ViewModelProvider(this)[ViewModelCharacters::class.java]
         observeLiveData()
 
         recyclerViewCharacters = binding.recyclerviewCharacters

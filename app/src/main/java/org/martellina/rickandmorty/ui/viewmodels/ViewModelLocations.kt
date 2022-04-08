@@ -5,10 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.martellina.rickandmorty.network.Repository
-import org.martellina.rickandmorty.network.model.EpisodeInfo
+import org.martellina.rickandmorty.data.Repository
+import org.martellina.rickandmorty.data.RepositoryImpl
 import org.martellina.rickandmorty.network.model.LocationInfo
 import org.martellina.rickandmorty.network.model.LocationsFilter
+import javax.inject.Inject
 
 class ViewModelLocations: ViewModel() {
 
@@ -17,7 +18,7 @@ class ViewModelLocations: ViewModel() {
     var pages = MutableLiveData<Int>()
     var isEmpty = MutableLiveData<Boolean>()
 
-    private val repository = Repository.get()
+    val repository = RepositoryImpl.get()
 
     fun getAllLocations(page: Int, filter: LocationsFilter) {
         isLoading.value = true

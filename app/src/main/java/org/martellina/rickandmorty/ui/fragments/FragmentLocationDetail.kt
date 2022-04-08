@@ -6,15 +6,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import org.martellina.rickandmorty.appComponent
 import org.martellina.rickandmorty.databinding.FragmentLocationDetailBinding
+import org.martellina.rickandmorty.di.factory.ViewModelEpisodesFactory
+import org.martellina.rickandmorty.di.factory.ViewModelLocationFactory
 import org.martellina.rickandmorty.network.model.CharacterInfo
 import org.martellina.rickandmorty.network.model.LocationInfo
 import org.martellina.rickandmorty.ui.Navigator
 import org.martellina.rickandmorty.ui.adapters.AdapterCharacter
+import org.martellina.rickandmorty.ui.viewmodels.ViewModelEpisodes
 import org.martellina.rickandmorty.ui.viewmodels.ViewModelLocation
+import javax.inject.Inject
 
 private const val KEY_LOCATION = "key.location"
 
@@ -22,14 +28,19 @@ class FragmentLocationDetail: Fragment() {
 
     private lateinit var binding: FragmentLocationDetailBinding
     private var location: LocationInfo? = null
-    private lateinit var viewModelLocation: ViewModelLocation
     private lateinit var navigator: Navigator
     private lateinit var recyclerView: RecyclerView
     private lateinit var layoutManager: StaggeredGridLayoutManager
     private lateinit var adapterCharacter: AdapterCharacter
     private var charactersList = ArrayList<CharacterInfo>()
 
+    @Inject
+    lateinit var factory: ViewModelLocationFactory
+
+    val viewModelLocation by viewModels<ViewModelLocation>(factoryProducer = { factory })
+
     override fun onAttach(context: Context) {
+        context.appComponent.inject(this)
         super.onAttach(context)
         if (context is Navigator) {
             navigator = context
@@ -50,7 +61,6 @@ class FragmentLocationDetail: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val id = requireArguments().getInt(KEY_LOCATION)
-        viewModelLocation = ViewModelProvider(this).get(ViewModelLocation::class.java)
         viewModelLocation.getLocationById(id)
         viewModelLocation.location.observe(viewLifecycleOwner) {
             it.let {
