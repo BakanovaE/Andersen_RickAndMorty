@@ -4,6 +4,9 @@ import android.content.Context
 import org.martellina.rickandmorty.data.mappers.CharacterMapper
 import org.martellina.rickandmorty.data.mappers.EpisodeMapper
 import org.martellina.rickandmorty.data.mappers.LocationMapper
+import org.martellina.rickandmorty.network.api.CharactersApi
+import org.martellina.rickandmorty.network.api.EpisodesApi
+import org.martellina.rickandmorty.network.api.LocationsApi
 import org.martellina.rickandmorty.network.retrofit.Common
 import org.martellina.rickandmorty.network.model.*
 import retrofit2.await
@@ -12,7 +15,11 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class RepositoryImpl @Inject constructor(context: Context): Repository{
+class RepositoryImpl @Inject constructor(context: Context,
+                                         private val episodesApi: EpisodesApi,
+                                         private val charactersApi: CharactersApi,
+                                         private val locationsApi: LocationsApi
+                                         ): Repository{
 
     private val database = Database.getDatabase(context.applicationContext)
 
@@ -23,10 +30,6 @@ class RepositoryImpl @Inject constructor(context: Context): Repository{
     private val episodeMapper = EpisodeMapper()
     private val locationMapper = LocationMapper()
     private val characterMapper = CharacterMapper()
-
-    private val episodesApi = Common.episodesApi
-    private val charactersApi = Common.charactersApi
-    private val locationsApi = Common.locationsApi
 
     override suspend fun getAllEpisodes(page: Int, filter: EpisodesFilter): Episodes? {
         var result: Episodes?

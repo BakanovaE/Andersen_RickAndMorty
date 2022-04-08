@@ -2,12 +2,13 @@ package org.martellina.rickandmorty.di
 
 import dagger.Component
 import dagger.Provides
+import org.martellina.rickandmorty.data.RepositoryImpl
 import org.martellina.rickandmorty.ui.fragments.*
 import org.martellina.rickandmorty.ui.viewmodels.*
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [AppModule::class, RepositoryModule::class])
+@Component(modules = [AppModule::class, RepositoryModule::class, RetrofitModule::class])
 interface AppComponent {
 
     fun inject(fragmentEpisodes: FragmentEpisodes)
@@ -23,5 +24,7 @@ interface AppComponent {
     fun inject(viewModelEpisode: ViewModelEpisode)
     fun inject(viewModelLocation: ViewModelLocation)
     fun inject(viewModelCharacter: ViewModelCharacter)
+
+    fun inject(repositoryImpl: RepositoryImpl)
 
 }
