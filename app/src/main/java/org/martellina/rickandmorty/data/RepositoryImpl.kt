@@ -1,6 +1,10 @@
 package org.martellina.rickandmorty.data
 
 import android.content.Context
+import org.martellina.rickandmorty.data.dao.CharacterDao
+import org.martellina.rickandmorty.data.dao.EpisodeDao
+import org.martellina.rickandmorty.data.dao.LocationDao
+import org.martellina.rickandmorty.data.dao.LocationDao_Impl
 import org.martellina.rickandmorty.data.mappers.CharacterMapper
 import org.martellina.rickandmorty.data.mappers.EpisodeMapper
 import org.martellina.rickandmorty.data.mappers.LocationMapper
@@ -15,17 +19,13 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class RepositoryImpl @Inject constructor(context: Context,
-                                         private val episodesApi: EpisodesApi,
+class RepositoryImpl @Inject constructor(private val episodesApi: EpisodesApi,
                                          private val charactersApi: CharactersApi,
-                                         private val locationsApi: LocationsApi
+                                         private val locationsApi: LocationsApi,
+                                         private val characterDao: CharacterDao,
+                                         private val episodeDao: EpisodeDao,
+                                         private val locationDao: LocationDao
                                          ): Repository{
-
-    private val database = Database.getDatabase(context.applicationContext)
-
-    private val episodeDao = database.getEpisodeDao()
-    private val locationDao = database.getLocationDao()
-    private val characterDao = database.getCharacterDao()
 
     private val episodeMapper = EpisodeMapper()
     private val locationMapper = LocationMapper()

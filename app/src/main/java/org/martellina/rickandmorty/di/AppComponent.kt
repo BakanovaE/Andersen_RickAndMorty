@@ -8,7 +8,7 @@ import org.martellina.rickandmorty.ui.viewmodels.*
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [AppModule::class, RepositoryModule::class, RetrofitModule::class])
+@Component(modules = [AppModule::class, RepositoryModule::class, RetrofitModule::class, DataModule::class])
 interface AppComponent {
 
     fun inject(fragmentEpisodes: FragmentEpisodes)

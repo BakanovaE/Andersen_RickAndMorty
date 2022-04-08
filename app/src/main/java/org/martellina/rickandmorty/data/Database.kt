@@ -13,15 +13,9 @@ import org.martellina.rickandmorty.data.entity.LocationDB
 
 @Database(entities = [CharacterDB::class, LocationDB::class, EpisodeDB::class], version = 1)
 abstract class Database : RoomDatabase() {
+
     abstract fun getCharacterDao() : CharacterDao
     abstract fun getLocationDao() : LocationDao
     abstract fun getEpisodeDao(): EpisodeDao
-
-    companion object {
-        fun getDatabase(context: Context) : org.martellina.rickandmorty.data.Database {
-            return Room.databaseBuilder(context, org.martellina.rickandmorty.data.Database::class.java, "database")
-                .build()
-        }
-    }
 
 }

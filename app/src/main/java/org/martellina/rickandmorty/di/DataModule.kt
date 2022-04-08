@@ -1,48 +1,39 @@
 package org.martellina.rickandmorty.di
 
 import android.content.Context
+import androidx.room.Room
 import dagger.Module
 import dagger.Provides
-import org.martellina.rickandmorty.data.Repository
-import org.martellina.rickandmorty.data.RepositoryImpl
+import org.martellina.rickandmorty.data.Database
+import org.martellina.rickandmorty.data.dao.CharacterDao
+import org.martellina.rickandmorty.data.dao.EpisodeDao
+import org.martellina.rickandmorty.data.dao.LocationDao
 import javax.inject.Singleton
 
 @Module
 class DataModule {
-//
-//    @Provides
-//    @Singleton
-//    fun provideDB(context: Context): Database {
-//        return Database.getDatabase(context)
-//    }
-//
-//    @Provides
-//    @Singleton
-//    fun provideRetrofit() : Retrofit {
-//        return Retrofit.Builder()
-//            .baseUrl("https://rickandmortyapi.com/api/")
-//            .addConverterFactory(GsonConverterFactory.create())
-//            .build()
-//    }
-//
-//    @Provides
-//    @Singleton
-//    fun provideCharactersApi(retrofit: Retrofit): CharactersApi {
-//        return retrofit.create(CharactersApi::class.java)
-//    }
-//
-//    @Provides
-//    @Singleton
-//    fun provideEpisodesApi(retrofit: Retrofit): EpisodesApi {
-//        return retrofit.create(EpisodesApi::class.java)
-//    }
-//
-//    @Provides
-//    @Singleton
-//    fun provide(retrofit: Retrofit): LocationsApi {
-//        return retrofit.create(LocationsApi::class.java)
-//    }
-//
+
+    @Provides
+    @Singleton
+    fun provideDB(context: Context): Database {
+        return Room.databaseBuilder(context, Database::class.java, "database")
+            .build()
+    }
+
+    @Provides
+    fun provideCharacterDao(database: Database): CharacterDao {
+        return database.getCharacterDao()
+    }
+
+    @Provides
+    fun provideEpisodeDao(database: Database): EpisodeDao {
+        return database.getEpisodeDao()
+    }
+
+    @Provides
+    fun provideLocationDao(database: Database): LocationDao {
+        return database.getLocationDao()
+    }
 
 
 }
