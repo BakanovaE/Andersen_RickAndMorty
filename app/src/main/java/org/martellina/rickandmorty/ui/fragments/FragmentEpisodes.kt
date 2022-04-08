@@ -107,7 +107,7 @@ class FragmentEpisodes: Fragment() {
         }
 
         binding.clearFilterButtonEpisodes.setOnClickListener {
-            filter = EpisodesFilter("", "")
+            filter = EpisodesFilter(null, null)
             viewModelEpisodes.getFilteredEpisodes(filter)
         }
     }

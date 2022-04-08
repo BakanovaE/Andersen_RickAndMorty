@@ -14,8 +14,8 @@ interface EpisodeDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun saveEpisode(episode: EpisodeDB)
 
-    @Query("SELECT * FROM episodes WHERE (:name IS NULL OR name LIKE :name) " +
-            "AND (:episode IS NULL OR episode LIKE :episode)")
+    @Query("SELECT * FROM episodes WHERE (:name IS NULL OR name LIKE '%' || :name || '%') " +
+            "AND (:episode IS NULL OR episode LIKE '%' || :episode || '%')")
     fun getFilteredEpisodes(name: String?, episode: String?): List<EpisodeDB>
 
     @Query("SELECT * FROM episodes WHERE id = :id")

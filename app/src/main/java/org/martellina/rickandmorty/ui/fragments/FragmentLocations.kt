@@ -88,7 +88,7 @@ class FragmentLocations: Fragment() {
         }
 
         binding.clearFilterButtonLocations.setOnClickListener {
-            filter = LocationsFilter("", "", "")
+            filter = LocationsFilter(null, null, null)
             viewModelLocations.getFilteredLocations(filter)
         }
     }

@@ -29,7 +29,6 @@ class FragmentCharacters: Fragment(R.layout.fragment_characters) {
     private lateinit var recyclerViewCharacters: RecyclerView
     private lateinit var layoutManager: StaggeredGridLayoutManager
     private var charactersList = ArrayList<CharacterInfo>()
-//    private lateinit var viewModelCharacters: ViewModelCharacters
     private lateinit var navigator: Navigator
     private var filter = CharactersFilter()
     private var page = 1
@@ -62,7 +61,6 @@ class FragmentCharacters: Fragment(R.layout.fragment_characters) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        viewModelCharacters = ViewModelProvider(this)[ViewModelCharacters::class.java]
         observeLiveData()
 
         recyclerViewCharacters = binding.recyclerviewCharacters
@@ -84,7 +82,7 @@ class FragmentCharacters: Fragment(R.layout.fragment_characters) {
         }
 
         binding.clearFilterButtonCharacters.setOnClickListener {
-            filter = CharactersFilter("", "", "", "", "")
+            filter = CharactersFilter(null, null, null, null, null)
             viewModelCharacters.getFilteredCharacters(filter)
         }
     }

@@ -12,9 +12,9 @@ interface LocationDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun saveLocations(location: LocationDB)
 
-    @Query("SELECT * FROM locations WHERE (:name IS NULL OR name LIKE :name) " +
-            "AND (:type IS NULL OR type LIKE :type)" +
-            "And (:dimension IS NULL OR dimension LIKE :dimension)")
+    @Query("SELECT * FROM locations WHERE (:name IS NULL OR name LIKE '%' || :name || '%') " +
+            "AND (:type IS NULL OR type LIKE '%' || :type || '%')" +
+            "And (:dimension IS NULL OR dimension LIKE '%' || :dimension || '%')")
     fun getFilteredLocations (name: String?, type: String?, dimension: String?): List<LocationDB>
 
     @Query("SELECT * FROM locations")
