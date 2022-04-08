@@ -11,13 +11,11 @@ import org.martellina.rickandmorty.network.model.CharacterInfo
 import org.martellina.rickandmorty.network.model.EpisodeInfo
 import javax.inject.Inject
 
-class ViewModelCharacter: ViewModel() {
+class ViewModelCharacter @Inject constructor(private val repository: Repository): ViewModel() {
 
     var character = MutableLiveData<CharacterInfo>()
     var episodesListLiveData = MutableLiveData<List<EpisodeInfo>>()
     var isLoading = MutableLiveData<Boolean>()
-
-    val repository = RepositoryImpl.get()
 
     fun getCharacterById(id: Int) {
         isLoading.value = true

@@ -11,14 +11,12 @@ import org.martellina.rickandmorty.network.model.LocationInfo
 import org.martellina.rickandmorty.network.model.LocationsFilter
 import javax.inject.Inject
 
-class ViewModelLocations: ViewModel() {
+class ViewModelLocations@Inject constructor(private val repository: Repository): ViewModel() {
 
     var locationsList = MutableLiveData<List<LocationInfo>>()
     var isLoading = MutableLiveData<Boolean>()
     var pages = MutableLiveData<Int>()
     var isEmpty = MutableLiveData<Boolean>()
-
-    val repository = RepositoryImpl.get()
 
     fun getAllLocations(page: Int, filter: LocationsFilter) {
         isLoading.value = true

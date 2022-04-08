@@ -3,8 +3,7 @@ package org.martellina.rickandmorty.di
 import dagger.Component
 import dagger.Provides
 import org.martellina.rickandmorty.ui.fragments.*
-import org.martellina.rickandmorty.ui.viewmodels.ViewModelCharacters
-import org.martellina.rickandmorty.ui.viewmodels.ViewModelEpisodes
+import org.martellina.rickandmorty.ui.viewmodels.*
 import javax.inject.Singleton
 
 @Singleton
@@ -17,6 +16,12 @@ interface AppComponent {
     fun inject(fragmentEpisodeDetail: FragmentEpisodeDetail)
     fun inject(fragmentLocationDetail: FragmentLocationDetail)
     fun inject(fragmentCharacterDetail: FragmentCharacterDetail)
+
     fun inject(viewModelCharacters: ViewModelCharacters)
+    fun inject(viewModelEpisodes: ViewModelEpisodes)
+    fun inject(viewModelLocations: ViewModelLocations)
+    fun inject(viewModelEpisode: ViewModelEpisode)
+    fun inject(viewModelLocation: ViewModelLocation)
+    fun inject(viewModelCharacter: ViewModelCharacter)
 
 }

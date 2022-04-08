@@ -8,21 +8,11 @@ import org.martellina.rickandmorty.network.retrofit.Common
 import org.martellina.rickandmorty.network.model.*
 import retrofit2.await
 import java.lang.Exception
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class RepositoryImpl private constructor(context: Context): Repository{
-
-    companion object {
-        private var INSTANCE: RepositoryImpl? = null
-        fun initialize(context: Context) {
-            if (INSTANCE == null) {
-                INSTANCE = RepositoryImpl(context)
-            }
-        }
-
-        fun get(): RepositoryImpl {
-            return INSTANCE ?: throw IllegalStateException("Repository should be initialized")
-        }
-    }
+@Singleton
+class RepositoryImpl @Inject constructor(context: Context): Repository{
 
     private val database = Database.getDatabase(context.applicationContext)
 

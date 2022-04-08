@@ -11,13 +11,11 @@ import org.martellina.rickandmorty.network.model.CharacterInfo
 import org.martellina.rickandmorty.network.model.LocationInfo
 import javax.inject.Inject
 
-class ViewModelLocation: ViewModel() {
+class ViewModelLocation @Inject constructor(private val repository: Repository): ViewModel() {
 
     var location = MutableLiveData<LocationInfo>()
     var charactersListLiveData = MutableLiveData<List<CharacterInfo>>()
     var isLoading = MutableLiveData<Boolean>()
-
-    val repository = RepositoryImpl.get()
 
     fun getLocationById(id: Int) {
         isLoading.value = true

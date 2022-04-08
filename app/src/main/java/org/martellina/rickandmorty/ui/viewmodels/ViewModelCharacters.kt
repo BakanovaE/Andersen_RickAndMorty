@@ -12,15 +12,12 @@ import org.martellina.rickandmorty.network.model.CharacterInfo
 import org.martellina.rickandmorty.network.model.CharactersFilter
 import javax.inject.Inject
 
-class ViewModelCharacters: ViewModel() {
+class ViewModelCharacters @Inject constructor(private val repository: Repository): ViewModel() {
 
     var charactersList = MutableLiveData<List<CharacterInfo>>()
     var isLoading = MutableLiveData<Boolean>()
     var pages = MutableLiveData<Int>()
     var isEmpty = MutableLiveData<Boolean>()
-
-    val repository = RepositoryImpl.get()
-
 
     fun getAllCharacters(page: Int, filter: CharactersFilter) {
         isLoading.value = true

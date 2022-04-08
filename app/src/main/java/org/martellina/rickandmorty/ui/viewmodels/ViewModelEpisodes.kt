@@ -11,15 +11,13 @@ import org.martellina.rickandmorty.network.model.EpisodeInfo
 import org.martellina.rickandmorty.network.model.EpisodesFilter
 import javax.inject.Inject
 
-class ViewModelEpisodes: ViewModel() {
+class ViewModelEpisodes @Inject constructor(private val repository: Repository): ViewModel() {
 
     var episodesList = MutableLiveData<List<EpisodeInfo>>()
     var isLoading = MutableLiveData<Boolean>()
     var pages = MutableLiveData<Int>()
     var filter = EpisodesFilter()
     var isEmpty = MutableLiveData<Boolean>()
-
-    val repository = RepositoryImpl.get()
 
     fun getAllEpisodes(page: Int, filter: EpisodesFilter) {
         isLoading.value = true

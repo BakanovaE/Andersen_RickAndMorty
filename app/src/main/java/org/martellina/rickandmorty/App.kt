@@ -15,8 +15,6 @@ class App: Application() {
     override fun onCreate() {
         super.onCreate()
 
-        val repository = RepositoryImpl.initialize(this)
-
         appComponent = DaggerAppComponent.builder()
             .appModule(AppModule(context = this))
             .build()
