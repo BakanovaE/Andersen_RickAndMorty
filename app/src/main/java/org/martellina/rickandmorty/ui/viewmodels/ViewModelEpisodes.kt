@@ -42,6 +42,7 @@ class ViewModelEpisodes : ViewModel() {
                     if (result.results.isEmpty())
                         isEmpty.value = true
                 }
+                updatePages(result?.info?.pages)
             }
         }
     }

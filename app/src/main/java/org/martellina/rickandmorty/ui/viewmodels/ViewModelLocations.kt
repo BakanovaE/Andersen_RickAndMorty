@@ -41,6 +41,7 @@ class ViewModelLocations: ViewModel() {
                                 isEmpty.value = true
                             }
                     }
+                        updatePages(result?.info?.pages)
             }
         }
     }
