@@ -21,19 +21,21 @@ class DataModule {
     }
 
     @Provides
+    @Singleton
     fun provideCharacterDao(database: Database): CharacterDao {
         return database.getCharacterDao()
     }
 
     @Provides
+    @Singleton
     fun provideEpisodeDao(database: Database): EpisodeDao {
         return database.getEpisodeDao()
     }
 
     @Provides
+    @Singleton
     fun provideLocationDao(database: Database): LocationDao {
         return database.getLocationDao()
     }
-
 
 }

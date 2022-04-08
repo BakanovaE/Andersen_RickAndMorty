@@ -24,12 +24,11 @@ class RepositoryImpl @Inject constructor(private val episodesApi: EpisodesApi,
                                          private val locationsApi: LocationsApi,
                                          private val characterDao: CharacterDao,
                                          private val episodeDao: EpisodeDao,
-                                         private val locationDao: LocationDao
+                                         private val locationDao: LocationDao,
+                                         private val characterMapper: CharacterMapper,
+                                         private val episodeMapper: EpisodeMapper,
+                                         private val locationMapper: LocationMapper
                                          ): Repository{
-
-    private val episodeMapper = EpisodeMapper()
-    private val locationMapper = LocationMapper()
-    private val characterMapper = CharacterMapper()
 
     override suspend fun getAllEpisodes(page: Int, filter: EpisodesFilter): Episodes? {
         var result: Episodes?

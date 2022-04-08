@@ -2,8 +2,9 @@ package org.martellina.rickandmorty.data.mappers
 
 import org.martellina.rickandmorty.data.entity.LocationDB
 import org.martellina.rickandmorty.network.model.LocationInfo
+import javax.inject.Inject
 
-class LocationMapper {
+class LocationMapper @Inject constructor() {
 
     fun mapFromNetworkToDB(location: LocationInfo) : LocationDB {
         return LocationDB(

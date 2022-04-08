@@ -3,8 +3,9 @@ package org.martellina.rickandmorty.data.mappers
 import org.martellina.rickandmorty.data.entity.CharacterDB
 import org.martellina.rickandmorty.network.model.CharacterInfo
 import org.martellina.rickandmorty.network.model.CharacterLocation
+import javax.inject.Inject
 
-class CharacterMapper {
+class CharacterMapper @Inject constructor() {
 
     fun mapFromNetworkToDB(character: CharacterInfo): CharacterDB {
         return CharacterDB(
