@@ -3,7 +3,7 @@
 
     <style name="Theme.MaterialComponents.DayNight.DarkActionBar.Launcher" >
 
-        <item name="android:windowBackground">@drawable/rickmorty</item>
+        <item name="android:windowBackground">@drawable/launch_screen</item>
 
     </style>
 
