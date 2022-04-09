@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -25,18 +26,18 @@ import javax.inject.Inject
 class FragmentCharacters: Fragment(R.layout.fragment_characters) {
 
     private lateinit var binding: FragmentCharactersBinding
-    private lateinit var adapterCharacters: AdapterCharacters
-    private lateinit var recyclerViewCharacters: RecyclerView
-    private lateinit var layoutManager: StaggeredGridLayoutManager
     private var charactersList = ArrayList<CharacterInfo>()
     private lateinit var navigator: Navigator
     private var filter = CharactersFilter()
     private var page = 1
     private var pages = 1
+    private var adapterCharacters = AdapterCharacters() { location ->
+        val fragmentCharacterDetails = FragmentCharacterDetail.newInstance(location)
+        navigator.navigate(fragmentCharacterDetails)
+    }
 
     @Inject
     lateinit var factory: ViewModelCharactersFactory
-
     val viewModelCharacters by viewModels<ViewModelCharacters>(factoryProducer = { factory })
 
     override fun onAttach(context: Context) {
@@ -63,7 +64,6 @@ class FragmentCharacters: Fragment(R.layout.fragment_characters) {
 
         observeLiveData()
 
-        recyclerViewCharacters = binding.recyclerviewCharacters
         initializeRecyclerView()
 
         if (charactersList.isNullOrEmpty()) {
@@ -94,35 +94,31 @@ class FragmentCharacters: Fragment(R.layout.fragment_characters) {
                 adapterCharacters.updateList(charactersList)
             }
         }
-
         viewModelCharacters.isLoading.observe(viewLifecycleOwner) {
             it.let {
                 binding.progressBar.apply { visibility = if (it) View.VISIBLE else View.GONE }
             }
         }
-
         viewModelCharacters.pages.observe(viewLifecycleOwner) {
             this.pages = it
         }
-
         viewModelCharacters.isEmpty.observe(viewLifecycleOwner) {
-            Toast.makeText(requireContext(), "No characters found, check filter or/and connect to network for loading more data", Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), R.string.toast_filter_characters, Toast.LENGTH_LONG).show()
         }
     }
 
     private fun initializeRecyclerView() {
-        layoutManager = StaggeredGridLayoutManager(2, 1)
-        recyclerViewCharacters.layoutManager = layoutManager
-        adapterCharacters = AdapterCharacters() { location ->
-            val fragmentCharacterDetails = FragmentCharacterDetail.newInstance(location)
-            navigator.navigate(fragmentCharacterDetails)
+        with(binding) {
+            with(recyclerviewCharacters) {
+                layoutManager = StaggeredGridLayoutManager(2, 1)
+                adapter = adapterCharacters
+            }
         }
-        recyclerViewCharacters.adapter = adapterCharacters
         initializePagination()
     }
 
     private fun initializePagination() {
-        recyclerViewCharacters.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        binding.recyclerviewCharacters.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 if (!recyclerView.canScrollVertically(1) and (page < pages)) {

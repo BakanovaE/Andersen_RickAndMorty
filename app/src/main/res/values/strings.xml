@@ -40,4 +40,8 @@
         <item>Unknown</item>
     </string-array>
 
+    <string name="toast_filter_characters">No characters found, check filter or/and connect to network for loading more data</string>
+    <string name="toast_filter_locations">No locations found, check filter or/and connect to network for loading more data</string>
+    <string name="toast_filter_episodes">No episodes found, check filter or/and connect to network for loading more data</string>
+
 </resources>

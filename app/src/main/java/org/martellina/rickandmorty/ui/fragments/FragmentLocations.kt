@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import org.martellina.rickandmorty.R
 import org.martellina.rickandmorty.appComponent
 import org.martellina.rickandmorty.ui.adapters.AdapterLocations
 import org.martellina.rickandmorty.databinding.FragmentLocationsBinding
@@ -32,8 +33,6 @@ class FragmentLocations: Fragment() {
             location -> val fragmentLocationDetail = FragmentLocationDetail.newInstance(location.id)
         navigator.navigate(fragmentLocationDetail)
     }
-    private lateinit var recyclerViewLocations: RecyclerView
-    private lateinit var layoutManager: StaggeredGridLayoutManager
     private var locationsList = ArrayList<LocationInfo>()
     private lateinit var navigator: Navigator
     private var filter = LocationsFilter()
@@ -42,7 +41,6 @@ class FragmentLocations: Fragment() {
 
     @Inject
     lateinit var factory: ViewModelLocationsFactory
-
     val viewModelLocations by viewModels<ViewModelLocations>(factoryProducer = { factory })
 
     override fun onAttach(context: Context) {
@@ -69,7 +67,6 @@ class FragmentLocations: Fragment() {
 
         observeLiveData()
 
-        recyclerViewLocations = binding.recyclerviewLocations
         initializeRecyclerView()
 
         if (locationsList.isNullOrEmpty()) {
@@ -77,20 +74,7 @@ class FragmentLocations: Fragment() {
             viewModelLocations.getAllLocations(page, filter)
         }
 
-        binding.filterButtonLocations.setOnClickListener {
-            FragmentFilterLocations.newInstance(filter)
-                .show(childFragmentManager, "LocationsDialog")
-        }
-
-        binding.swipeRefreshLayoutLocations.setOnRefreshListener {
-            viewModelLocations.getFilteredLocations(filter)
-            binding.swipeRefreshLayoutLocations.isRefreshing = false
-        }
-
-        binding.clearFilterButtonLocations.setOnClickListener {
-            filter = LocationsFilter(null, null, null)
-            viewModelLocations.getFilteredLocations(filter)
-        }
+        initializeButtons()
     }
 
     private fun observeLiveData() {
@@ -112,19 +96,22 @@ class FragmentLocations: Fragment() {
         }
 
         viewModelLocations.isEmpty.observe(viewLifecycleOwner) {
-            Toast.makeText(requireContext(), "No locations found, check filter or/and connect to network for loading more data", Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), R.string.toast_filter_locations, Toast.LENGTH_LONG).show()
         }
     }
 
     private fun initializeRecyclerView() {
-        layoutManager = StaggeredGridLayoutManager(2, 1)
-        recyclerViewLocations.layoutManager = layoutManager
-        recyclerViewLocations.adapter = adapterLocations
+        with(binding) {
+            with(recyclerviewLocations) {
+                layoutManager = StaggeredGridLayoutManager(2, 1)
+                adapter = adapterLocations
+            }
+        }
         initializePagination()
     }
 
     private fun initializePagination() {
-        recyclerViewLocations.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        binding.recyclerviewLocations.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 if (!recyclerView.canScrollVertically(1) and (page < pages)) {
@@ -135,12 +122,29 @@ class FragmentLocations: Fragment() {
         })
     }
 
+    private fun initializeButtons() {
+        with(binding) {
+            filterButtonLocations.setOnClickListener {
+                FragmentFilterLocations.newInstance(filter)
+                    .show(childFragmentManager, "LocationsDialog")
+            }
+
+            swipeRefreshLayoutLocations.setOnRefreshListener {
+                viewModelLocations.getFilteredLocations(filter)
+                binding.swipeRefreshLayoutLocations.isRefreshing = false
+            }
+
+            clearFilterButtonLocations.setOnClickListener {
+                filter = LocationsFilter(null, null, null)
+                viewModelLocations.getFilteredLocations(filter)
+            }
+        }
+    }
 
     fun getFilteredLocations(filter: LocationsFilter) {
         viewModelLocations.getFilteredLocations(filter)
         this.filter = filter
     }
-
 
     companion object {
         fun newInstance() = FragmentLocations()

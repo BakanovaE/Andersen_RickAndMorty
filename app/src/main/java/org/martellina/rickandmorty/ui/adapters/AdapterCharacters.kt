@@ -26,9 +26,7 @@ class AdapterCharacters(private val onClickListener: (CharacterInfo) -> Unit)
                 Picasso.get()
                     .load(character.image)
                     .into(imageViewCharacter)
-
             }
-
         }
     }
 

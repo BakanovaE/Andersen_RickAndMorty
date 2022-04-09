@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import org.martellina.rickandmorty.R
 import org.martellina.rickandmorty.appComponent
 import org.martellina.rickandmorty.databinding.FragmentEpisodesBinding
 import org.martellina.rickandmorty.di.factory.ViewModelEpisodesFactory
@@ -35,14 +36,11 @@ class FragmentEpisodes: Fragment() {
 
     @Inject
     lateinit var factory: ViewModelEpisodesFactory
-
     val viewModelEpisodes by viewModels<ViewModelEpisodes>(factoryProducer = { factory })
 
     override fun onAttach(context: Context) {
         context.appComponent.inject(this)
-
         super.onAttach(context)
-
         if(context is Navigator) {
             navigator = context
         } else {
@@ -101,14 +99,16 @@ class FragmentEpisodes: Fragment() {
     }
 
     private fun initializeButtons() {
-        binding.filterButtonEpisodes.setOnClickListener {
-            FragmentFilterEpisodes.newInstance(filter)
-                .show(childFragmentManager, "EpisodesDialog")
-        }
+        with(binding) {
+            filterButtonEpisodes.setOnClickListener {
+                FragmentFilterEpisodes.newInstance(filter)
+                    .show(childFragmentManager, "EpisodesDialog")
+            }
 
-        binding.clearFilterButtonEpisodes.setOnClickListener {
-            filter = EpisodesFilter(null, null)
-            viewModelEpisodes.getFilteredEpisodes(filter)
+            clearFilterButtonEpisodes.setOnClickListener {
+                filter = EpisodesFilter(null, null)
+                viewModelEpisodes.getFilteredEpisodes(filter)
+            }
         }
     }
 
@@ -131,7 +131,7 @@ class FragmentEpisodes: Fragment() {
         }
 
         viewModelEpisodes.isEmpty.observe(viewLifecycleOwner) {
-            Toast.makeText(requireContext(), "No episodes found, check filter or/and connect to network for loading more data", Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), R.string.toast_filter_episodes, Toast.LENGTH_LONG).show()
         }
     }
 
