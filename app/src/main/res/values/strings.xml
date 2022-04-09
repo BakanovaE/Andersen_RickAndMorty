@@ -48,4 +48,7 @@
 
     <string name="toast_empty_list">No data found, connect to network for loading</string>
 
+    <string name="toast_empty_filter">Filter is empty</string>
+    <string name="toast_same_filter">Same filter</string>
+
 </resources>

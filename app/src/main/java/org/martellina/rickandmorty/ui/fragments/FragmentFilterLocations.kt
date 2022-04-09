@@ -4,7 +4,9 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
+import org.martellina.rickandmorty.R
 import org.martellina.rickandmorty.databinding.FragmentFilterLocationsBinding
 import org.martellina.rickandmorty.network.model.EpisodesFilter
 import org.martellina.rickandmorty.network.model.LocationsFilter
@@ -30,14 +32,20 @@ class FragmentFilterLocations: DialogFragment() {
             .setPositiveButton("Submit") {_, _  ->
                 val name = if (binding.editTextNameFilterLocations.text.isNotEmpty()) {
                     binding.editTextNameFilterLocations.text.toString()
-                } else null
+                } else ""
                 val type = if (binding.editTextTypeFilterLocations.text.isNotEmpty()) {
                     binding.editTextTypeFilterLocations.text.toString()
-                } else null
+                } else ""
                 val dimension = if (binding.editTextDimensionFilterLocations.text.isNotEmpty()) {
                     binding.editTextDimensionFilterLocations.text.toString()
-                } else null
+                } else ""
                 val filter = LocationsFilter(name, type, dimension)
+                if (isEmpty(filter)) {
+                    Toast.makeText(requireContext(), R.string.toast_empty_filter, Toast.LENGTH_SHORT).show()
+                }
+                if (isSame(args, filter)) {
+                    Toast.makeText(requireContext(), R.string.toast_same_filter, Toast.LENGTH_SHORT).show()
+                }
                 (parentFragment as FragmentLocations).getFilteredLocations(filter)
             }
             .setNegativeButton("Cancel", null)
@@ -46,6 +54,16 @@ class FragmentFilterLocations: DialogFragment() {
             }
             .create()
         return dialog
+    }
+
+    private fun isEmpty(filter: LocationsFilter): Boolean {
+        return filter.name == "" && filter.type == "" && filter.dimension == ""
+    }
+
+    private fun isSame(args: LocationsFilter?, filter: LocationsFilter): Boolean {
+        return args?.name == filter.name
+                && args?.type == filter.type
+                && args?.dimension == filter.dimension
     }
 
     companion object {

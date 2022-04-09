@@ -4,9 +4,10 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
+import org.martellina.rickandmorty.R
 import org.martellina.rickandmorty.databinding.FragmentFilterEpisodesBinding
-import org.martellina.rickandmorty.network.model.Episodes
 import org.martellina.rickandmorty.network.model.EpisodesFilter
 
 class FragmentFilterEpisodes: DialogFragment() {
@@ -31,11 +32,17 @@ class FragmentFilterEpisodes: DialogFragment() {
             .setPositiveButton("Submit") {_, _  ->
                 val name = if (binding.editTextNameFilterEpisodes.text.isNotEmpty()) {
                     binding.editTextNameFilterEpisodes.text.toString()
-                } else null
+                } else ""
                 val code = if (binding.editTextCodeFilterEpisodes.text.isNotEmpty()) {
                     binding.editTextCodeFilterEpisodes.text.toString()
-                } else null
+                } else ""
                 filter = EpisodesFilter(name, code)
+                if (isEmpty(filter)) {
+                    Toast.makeText(requireContext(), R.string.toast_empty_filter, Toast.LENGTH_SHORT).show()
+                }
+                if (isSame(args, filter)) {
+                    Toast.makeText(requireContext(), R.string.toast_same_filter, Toast.LENGTH_SHORT).show()
+                }
                 (parentFragment as FragmentEpisodes).getFilteredEpisodes(filter)
             }
             .setNegativeButton("Cancel", null)
@@ -44,6 +51,14 @@ class FragmentFilterEpisodes: DialogFragment() {
             }
             .create()
         return dialog
+    }
+
+    private fun isEmpty(filter: EpisodesFilter): Boolean {
+        return filter.name == "" && filter.code == ""
+    }
+
+    private fun isSame(args: EpisodesFilter?, filter: EpisodesFilter): Boolean {
+        return args?.name == filter.name && args?.code == filter.code
     }
 
     companion object {

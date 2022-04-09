@@ -4,11 +4,13 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import org.martellina.rickandmorty.R
 import org.martellina.rickandmorty.databinding.FragmentFilterCharactersBinding
 import org.martellina.rickandmorty.network.model.CharactersFilter
 import org.martellina.rickandmorty.network.model.EpisodesFilter
+import org.martellina.rickandmorty.network.model.LocationsFilter
 
 class FragmentFilterCharacters: DialogFragment() {
 
@@ -28,20 +30,26 @@ class FragmentFilterCharacters: DialogFragment() {
             .setPositiveButton("Submit") { _, _, ->
                 val name = if (binding.editTextNameFilterCharacters.text.isNotEmpty()) {
                     binding.editTextNameFilterCharacters.text.toString()
-                } else null
+                } else ""
                 val status = if (binding.spinnerStatusFilterCharacters.selectedItem != "Any") {
                     binding.spinnerStatusFilterCharacters.selectedItem.toString()
-                } else null
+                } else ""
                 val species = if (binding.editTextSpeciesFilterCharacters.text.isNotEmpty()) {
                     binding.editTextSpeciesFilterCharacters.text.toString()
-                } else null
+                } else ""
                 val type = if (binding.editTextTypeFilterCharacters.text.isNotEmpty()) {
                     binding.editTextTypeFilterCharacters.text.toString()
-                } else null
+                } else ""
                 val gender = if (binding.spinnerGenderFilterCharacters.selectedItem != "Any") {
                     binding.spinnerGenderFilterCharacters.selectedItem as String
-                } else null
+                } else ""
                 val filter = CharactersFilter(name, status, species, type, gender)
+                if (isEmpty(filter)) {
+                    Toast.makeText(requireContext(), R.string.toast_empty_filter, Toast.LENGTH_SHORT).show()
+                }
+                if (isSame(args, filter)) {
+                    Toast.makeText(requireContext(), R.string.toast_same_filter, Toast.LENGTH_SHORT).show()
+                }
                 (parentFragment as FragmentCharacters).getFilteredCharacters(filter)
             }
             .setNegativeButton("Cancel", null)
@@ -74,6 +82,22 @@ class FragmentFilterCharacters: DialogFragment() {
                 )
             } else spinnerGenderFilterCharacters.setSelection(0)
         }
+    }
+
+    private fun isEmpty(filter: CharactersFilter): Boolean {
+        return filter.name == ""
+                && filter.status == ""
+                && filter.species == ""
+                && filter.type == ""
+                && filter.gender == ""
+    }
+
+    private fun isSame(args: CharactersFilter?, filter: CharactersFilter): Boolean {
+        return args?.name == filter.name
+                && args?.status == filter.status
+                && args?.species == filter.species
+                && args?.type == filter.type
+                && args?.gender == filter.gender
     }
 
     companion object {
