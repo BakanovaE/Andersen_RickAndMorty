@@ -22,8 +22,8 @@
         android:layout_height="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/menu_bottom_navigation"
-        app:itemTextAppearanceActive="@color/white"
-        app:itemTextColor="@color/colorSecondaryVariant"
-        android:background="@color/colorPrimary"/>
+        app:itemBackground="@color/background_bottom_navigation"
+        app:itemIconTint="@color/icon_and_text_color_bottom_navigation"
+        app:itemTextColor="@color/icon_and_text_color_bottom_navigation"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
