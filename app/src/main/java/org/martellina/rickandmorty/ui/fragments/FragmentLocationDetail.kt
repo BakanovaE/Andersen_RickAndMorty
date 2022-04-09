@@ -63,9 +63,12 @@ class FragmentLocationDetail: Fragment() {
 
         val id = requireArguments().getInt(KEY_LOCATION)
 
-        viewModelLocation.getLocationById(id)
+        if (location == null) {
+            viewModelLocation.getLocationById(id)
+        }
 
         observeLiveData()
+        initializeRecyclerView()
     }
 
     private fun observeLiveData() {
@@ -93,7 +96,9 @@ class FragmentLocationDetail: Fragment() {
                 navigator.goBack()
             }
         }
-        getCharactersList(location)
+        if(charactersList.isNullOrEmpty()) {
+            getCharactersList(location)
+        }
     }
 
     private fun getCharactersList(location: LocationInfo?) {
@@ -104,7 +109,6 @@ class FragmentLocationDetail: Fragment() {
                 adapterCharacter.updateList(charactersList)
             }
         }
-        initializeRecyclerView()
     }
 
     private fun initializeRecyclerView() {

@@ -2,27 +2,22 @@ package org.martellina.rickandmorty.ui.fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import org.martellina.rickandmorty.R
 import org.martellina.rickandmorty.appComponent
 import org.martellina.rickandmorty.ui.adapters.AdapterLocations
 import org.martellina.rickandmorty.databinding.FragmentLocationsBinding
-import org.martellina.rickandmorty.di.factory.ViewModelEpisodesFactory
 import org.martellina.rickandmorty.di.factory.ViewModelLocationsFactory
-import org.martellina.rickandmorty.network.model.EpisodesFilter
 import org.martellina.rickandmorty.network.model.LocationInfo
 import org.martellina.rickandmorty.network.model.LocationsFilter
 import org.martellina.rickandmorty.ui.Navigator
-import org.martellina.rickandmorty.ui.viewmodels.ViewModelEpisodes
 import org.martellina.rickandmorty.ui.viewmodels.ViewModelLocations
 import javax.inject.Inject
 
@@ -65,39 +60,16 @@ class FragmentLocations: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        observeLiveData()
-
-        initializeRecyclerView()
-
         if (locationsList.isNullOrEmpty()) {
             page = 1
             viewModelLocations.getAllLocations(page, filter)
         }
 
+        initializeRecyclerView()
+        initializePagination()
         initializeButtons()
-    }
-
-    private fun observeLiveData() {
-        viewModelLocations.locationsList.observe(viewLifecycleOwner) {
-            it.let {
-                locationsList = it as ArrayList<LocationInfo>
-                adapterLocations.updateList(locationsList)
-            }
-        }
-
-        viewModelLocations.isLoading.observe(viewLifecycleOwner) {
-            it.let {
-                binding.progressBar.apply { visibility = if (it) View.VISIBLE else View.GONE }
-            }
-        }
-
-        viewModelLocations.pages.observe(viewLifecycleOwner) {
-            this.pages = it
-        }
-
-        viewModelLocations.isEmpty.observe(viewLifecycleOwner) {
-            Toast.makeText(requireContext(), R.string.toast_filter_locations, Toast.LENGTH_LONG).show()
-        }
+        initializeSwipeRefreshLayout()
+        observeLiveData()
     }
 
     private fun initializeRecyclerView() {
@@ -107,7 +79,6 @@ class FragmentLocations: Fragment() {
                 adapter = adapterLocations
             }
         }
-        initializePagination()
     }
 
     private fun initializePagination() {
@@ -128,16 +99,44 @@ class FragmentLocations: Fragment() {
                 FragmentFilterLocations.newInstance(filter)
                     .show(childFragmentManager, "LocationsDialog")
             }
-
-            swipeRefreshLayoutLocations.setOnRefreshListener {
-                viewModelLocations.getFilteredLocations(filter)
-                binding.swipeRefreshLayoutLocations.isRefreshing = false
-            }
-
             clearFilterButtonLocations.setOnClickListener {
                 filter = LocationsFilter(null, null, null)
                 viewModelLocations.getFilteredLocations(filter)
             }
+        }
+    }
+
+    private fun initializeSwipeRefreshLayout() {
+        binding.swipeRefreshLayoutLocations.setOnRefreshListener {
+            viewModelLocations.getAllLocations(page, filter)
+            binding.swipeRefreshLayoutLocations.isRefreshing = false
+        }
+    }
+
+    private fun observeLiveData() {
+        viewModelLocations.locationsList.observe(viewLifecycleOwner) {
+            it.let {
+                locationsList = it as ArrayList<LocationInfo>
+                adapterLocations.updateList(locationsList)
+            }
+        }
+
+        viewModelLocations.isLoading.observe(viewLifecycleOwner) {
+            it.let {
+                binding.progressBar.apply { visibility = if (it) View.VISIBLE else View.GONE }
+            }
+        }
+
+        viewModelLocations.pages.observe(viewLifecycleOwner) {
+            this.pages = it
+        }
+
+        viewModelLocations.isEmptyFilteredResult.observe(viewLifecycleOwner) {
+            Toast.makeText(requireContext(), R.string.toast_filter_locations, Toast.LENGTH_SHORT).show()
+        }
+
+        viewModelLocations.isEmpty.observe(viewLifecycleOwner) {
+            Toast.makeText(requireContext(), R.string.toast_empty_list, Toast.LENGTH_SHORT).show()
         }
     }
 

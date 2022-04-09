@@ -24,6 +24,8 @@
     <string name="location_title">Location:</string>
     <string name="episodes_title">Episodes:</string>
     <string name="back">Back</string>
+    <string name="species_title">Species</string>
+    <string name="status_title">Status</string>
 
     <string-array name="gender">
         <item>Any</item>
@@ -43,5 +45,7 @@
     <string name="toast_filter_characters">No characters found, check filter or/and connect to network for loading more data</string>
     <string name="toast_filter_locations">No locations found, check filter or/and connect to network for loading more data</string>
     <string name="toast_filter_episodes">No episodes found, check filter or/and connect to network for loading more data</string>
+
+    <string name="toast_empty_list">No data found, connect to network for loading</string>
 
 </resources>

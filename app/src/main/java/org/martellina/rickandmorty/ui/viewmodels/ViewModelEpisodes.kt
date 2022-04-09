@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.martellina.rickandmorty.data.Repository
-import org.martellina.rickandmorty.data.RepositoryImpl
 import org.martellina.rickandmorty.network.model.EpisodeInfo
 import org.martellina.rickandmorty.network.model.EpisodesFilter
 import javax.inject.Inject
@@ -17,6 +16,7 @@ class ViewModelEpisodes @Inject constructor(private val repository: Repository):
     var isLoading = MutableLiveData<Boolean>()
     var pages = MutableLiveData<Int>()
     var filter = EpisodesFilter()
+    var isEmptyFilteredResult = MutableLiveData<Boolean>()
     var isEmpty = MutableLiveData<Boolean>()
 
     fun getAllEpisodes(page: Int, filter: EpisodesFilter) {
@@ -24,7 +24,7 @@ class ViewModelEpisodes @Inject constructor(private val repository: Repository):
         viewModelScope.launch(Dispatchers.IO) {
             val result = repository.getAllEpisodes(page, filter)
             launch(Dispatchers.Main) {
-                updateEpisodesList(result?.results, filter)
+                updateEpisodesList(result?.results)
                 updatePages(result?.info?.pages)
             }
         }
@@ -38,16 +38,20 @@ class ViewModelEpisodes @Inject constructor(private val repository: Repository):
                 setFilteredList(result?.results)
                 if (result != null) {
                     if (result.results.isEmpty())
-                        isEmpty.value = true
+                        isEmptyFilteredResult.value = true
                 }
                 updatePages(result?.info?.pages)
             }
         }
     }
 
-    private fun updateEpisodesList(list: List<EpisodeInfo>?, filter: EpisodesFilter) {
+    private fun updateEpisodesList(list: List<EpisodeInfo>?) {
             if (episodesList.value.isNullOrEmpty()) {
-                episodesList.value = list
+                if (list.isNullOrEmpty()) {
+                    isEmpty.value = true
+                } else {
+                    episodesList.value = list
+                }
             } else {
                 if (list != null) {
                     for (episode in list) {

@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -15,7 +14,6 @@ import org.martellina.rickandmorty.R
 import org.martellina.rickandmorty.appComponent
 import org.martellina.rickandmorty.databinding.FragmentCharactersBinding
 import org.martellina.rickandmorty.di.factory.ViewModelCharactersFactory
-import org.martellina.rickandmorty.di.factory.ViewModelEpisodesFactory
 import org.martellina.rickandmorty.network.model.CharacterInfo
 import org.martellina.rickandmorty.network.model.CharactersFilter
 import org.martellina.rickandmorty.ui.Navigator
@@ -77,7 +75,7 @@ class FragmentCharacters: Fragment(R.layout.fragment_characters) {
         }
 
         binding.swipeRefreshLayoutCharacters.setOnRefreshListener {
-            viewModelCharacters.getFilteredCharacters(filter)
+            viewModelCharacters.getAllCharacters(page, filter)
             binding.swipeRefreshLayoutCharacters.isRefreshing = false
         }
 
@@ -102,8 +100,11 @@ class FragmentCharacters: Fragment(R.layout.fragment_characters) {
         viewModelCharacters.pages.observe(viewLifecycleOwner) {
             this.pages = it
         }
+        viewModelCharacters.isEmptyFilteredResult.observe(viewLifecycleOwner) {
+            Toast.makeText(requireContext(), R.string.toast_filter_characters, Toast.LENGTH_SHORT).show()
+        }
         viewModelCharacters.isEmpty.observe(viewLifecycleOwner) {
-            Toast.makeText(requireContext(), R.string.toast_filter_characters, Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), R.string.toast_empty_list, Toast.LENGTH_SHORT).show()
         }
     }
 

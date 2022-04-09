@@ -61,9 +61,12 @@ class FragmentCharacterDetail: Fragment(R.layout.fragment_character_detail) {
 
         val id = requireArguments().getInt(KEY_CHARACTER)
 
-        viewModelCharacter.getCharacterById(id)
+        if(character == null) {
+            viewModelCharacter.getCharacterById(id)
+        }
 
         observeLiveData()
+        initializeRecyclerView()
     }
 
     private fun observeLiveData() {
@@ -79,7 +82,6 @@ class FragmentCharacterDetail: Fragment(R.layout.fragment_character_detail) {
             }
         }
     }
-
 
     private fun updateUI(character: CharacterInfo?) {
         with(binding) {
@@ -114,14 +116,14 @@ class FragmentCharacterDetail: Fragment(R.layout.fragment_character_detail) {
                             FragmentLocationDetail.newInstance(character.location.url.split("/").last().trim().toInt())
                         )
                     } else {
-                        Toast.makeText(requireContext(), "Location is unknown", Toast.LENGTH_SHORT)
-                            .show()
+                        Toast.makeText(requireContext(), "Location is unknown", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
         }
-
-        getEpisodesList(character)
+        if(episodesList.isNullOrEmpty()) {
+            getEpisodesList(character)
+        }
     }
 
     private fun getEpisodesList(character: CharacterInfo?) {
@@ -132,8 +134,6 @@ class FragmentCharacterDetail: Fragment(R.layout.fragment_character_detail) {
                 adapterEpisode.updateList(episodesList)
             }
         }
-
-        initializeRecyclerView()
     }
 
     private fun initializeRecyclerView() {

@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.martellina.rickandmorty.data.Repository
-import org.martellina.rickandmorty.data.RepositoryImpl
 import org.martellina.rickandmorty.network.model.LocationInfo
 import org.martellina.rickandmorty.network.model.LocationsFilter
 import javax.inject.Inject
@@ -16,6 +15,7 @@ class ViewModelLocations@Inject constructor(private val repository: Repository):
     var locationsList = MutableLiveData<List<LocationInfo>>()
     var isLoading = MutableLiveData<Boolean>()
     var pages = MutableLiveData<Int>()
+    var isEmptyFilteredResult = MutableLiveData<Boolean>()
     var isEmpty = MutableLiveData<Boolean>()
 
     fun getAllLocations(page: Int, filter: LocationsFilter) {
@@ -23,7 +23,7 @@ class ViewModelLocations@Inject constructor(private val repository: Repository):
         viewModelScope.launch(Dispatchers.IO) {
             val result = repository.getAllLocations(page, filter)
             launch(Dispatchers.Main) {
-                updateLiveData(result?.results, filter)
+                updateLiveData(result?.results)
                 updatePages(result?.info?.pages)
             }
         }
@@ -37,7 +37,7 @@ class ViewModelLocations@Inject constructor(private val repository: Repository):
                         setFilteredList(result?.results)
                         if (result != null) {
                             if(result.results.isEmpty()) {
-                                isEmpty.value = true
+                                isEmptyFilteredResult.value = true
                             }
                     }
                         updatePages(result?.info?.pages)
@@ -45,10 +45,13 @@ class ViewModelLocations@Inject constructor(private val repository: Repository):
         }
     }
 
-    private fun updateLiveData(list: List<LocationInfo>?, filter: LocationsFilter) {
-        if (filter.name.isNullOrEmpty() || filter.type.isNullOrEmpty() || filter.dimension.isNullOrEmpty()) {
+    private fun updateLiveData(list: List<LocationInfo>?) {
             if (locationsList.value.isNullOrEmpty()) {
-                locationsList.value = list
+                if(list.isNullOrEmpty()) {
+                    isEmpty.value = true
+                } else {
+                    locationsList.value = list
+                }
             } else {
                 if (list != null) {
                     for (location in list) {
@@ -56,9 +59,6 @@ class ViewModelLocations@Inject constructor(private val repository: Repository):
                     }
                 }
             }
-        } else {
-            locationsList.value = list
-        }
         isLoading.value = false
     }
 
@@ -67,9 +67,7 @@ class ViewModelLocations@Inject constructor(private val repository: Repository):
         isLoading.value = false
     }
 
-
     private fun updatePages(pages: Int?) {
         this.pages.value = pages
     }
-
 }

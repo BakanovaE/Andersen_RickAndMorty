@@ -64,9 +64,12 @@ class FragmentEpisodeDetail: Fragment() {
 
         val id = requireArguments().getInt(KEY_EPISODE)
 
-        viewModelEpisode.getEpisodeById(id)
+        if (episode == null) {
+            viewModelEpisode.getEpisodeById(id)
+        }
 
         observeLiveData()
+        initializeRecyclerView()
     }
 
     private fun observeLiveData() {
@@ -92,7 +95,9 @@ class FragmentEpisodeDetail: Fragment() {
                 navigator.goBack()
             }
         }
-        getCharactersList(episode)
+        if (charactersList.isNullOrEmpty()) {
+            getCharactersList(episode)
+        }
     }
 
     private fun getCharactersList(episode: EpisodeInfo?) {
@@ -103,7 +108,6 @@ class FragmentEpisodeDetail: Fragment() {
                 adapterCharacter.updateList(charactersList)
             }
         }
-        initializeRecyclerView()
     }
 
     private fun initializeRecyclerView() {

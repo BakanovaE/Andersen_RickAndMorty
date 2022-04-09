@@ -93,7 +93,7 @@ class FragmentEpisodes: Fragment() {
 
     private fun initializeSwipeRefreshLayout() {
         binding.swipeRefreshLayoutEpisodes.setOnRefreshListener {
-            viewModelEpisodes.getFilteredEpisodes(filter)
+            viewModelEpisodes.getAllEpisodes(page, filter)
             binding.swipeRefreshLayoutEpisodes.isRefreshing = false
         }
     }
@@ -130,8 +130,12 @@ class FragmentEpisodes: Fragment() {
             this.pages = it
         }
 
+        viewModelEpisodes.isEmptyFilteredResult.observe(viewLifecycleOwner) {
+            Toast.makeText(requireContext(), R.string.toast_filter_episodes, Toast.LENGTH_SHORT).show()
+        }
+
         viewModelEpisodes.isEmpty.observe(viewLifecycleOwner) {
-            Toast.makeText(requireContext(), R.string.toast_filter_episodes, Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), R.string.toast_empty_list, Toast.LENGTH_SHORT).show()
         }
     }
 

@@ -10,9 +10,9 @@
         android:id="@+id/image_view_character"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:contentDescription="@string/image_view_character_description"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -20,11 +20,12 @@
         android:id="@+id/text_view_character_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:textSize="@dimen/names_text_view"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/image_view_character"
-        tools:text="Name"/>
+        tools:text="Name" />
 
     <TextView
         android:id="@+id/textView_status_title"
