@@ -6,14 +6,13 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.martellina.rickandmorty.data.Repository
-import org.martellina.rickandmorty.data.RepositoryImpl
 import org.martellina.rickandmorty.network.model.CharacterInfo
 import org.martellina.rickandmorty.network.model.EpisodeInfo
 import javax.inject.Inject
 
 class ViewModelCharacter @Inject constructor(private val repository: Repository): ViewModel() {
 
-    var character = MutableLiveData<CharacterInfo>()
+    var characterLiveData = MutableLiveData<CharacterInfo>()
     var episodesListLiveData = MutableLiveData<List<EpisodeInfo>>()
     var isLoading = MutableLiveData<Boolean>()
 
@@ -22,7 +21,8 @@ class ViewModelCharacter @Inject constructor(private val repository: Repository)
         viewModelScope.launch(Dispatchers.IO) {
             val result = repository.getCharacterById(id)
             launch(Dispatchers.Main) {
-                updateLiveData(result)
+                characterLiveData.postValue(result)
+                updateCharacterLiveData(result)
             }
         }
     }
@@ -47,8 +47,8 @@ class ViewModelCharacter @Inject constructor(private val repository: Repository)
         isLoading.value = false
     }
 
-    private fun updateLiveData(character: CharacterInfo?) {
-        this.character.value = character
+    private fun updateCharacterLiveData(character: CharacterInfo?) {
+        this.characterLiveData.value = character
         isLoading.value = false
     }
 

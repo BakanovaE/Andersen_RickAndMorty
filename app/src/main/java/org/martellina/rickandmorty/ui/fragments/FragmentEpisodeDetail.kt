@@ -30,15 +30,15 @@ class FragmentEpisodeDetail: Fragment() {
     private lateinit var binding: FragmentEpisodeDetailBinding
     private var episode: EpisodeInfo? = null
     private lateinit var navigator: Navigator
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var layoutManager: StaggeredGridLayoutManager
-    private lateinit var adapterCharacter: AdapterCharacter
+    private var adapterCharacter = AdapterCharacter {
+            character -> val fragmentCharacterDetails = FragmentCharacterDetail.newInstance(character)
+        navigator.navigate(fragmentCharacterDetails)
+    }
     private var charactersList = ArrayList<CharacterInfo>()
 
     @Inject
     lateinit var factory: ViewModelEpisodeFactory
-
-    val viewModelEpisode by viewModels<ViewModelEpisode>(factoryProducer = { factory })
+    private val viewModelEpisode by viewModels<ViewModelEpisode>(factoryProducer = { factory })
 
     override fun onAttach(context: Context) {
         context.appComponent.inject(this)
@@ -61,8 +61,15 @@ class FragmentEpisodeDetail: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         val id = requireArguments().getInt(KEY_EPISODE)
+
         viewModelEpisode.getEpisodeById(id)
+
+        observeLiveData()
+    }
+
+    private fun observeLiveData() {
         viewModelEpisode.episodeLiveData.observe(viewLifecycleOwner) {
             it.let {
                 episode = it as EpisodeInfo
@@ -76,33 +83,36 @@ class FragmentEpisodeDetail: Fragment() {
         }
     }
 
-    private fun initializeRecyclerView(charactersList: ArrayList<CharacterInfo>) {
-        layoutManager = StaggeredGridLayoutManager(2, 1)
-        recyclerView.layoutManager = layoutManager
-        adapterCharacter = AdapterCharacter() {
-                character -> val fragmentCharacterDetails = FragmentCharacterDetail.newInstance(character)
-                navigator.navigate(fragmentCharacterDetails)
+    private fun updateUI(episode: EpisodeInfo?) {
+        with(binding) {
+            textViewEpisodeName.text = episode?.name
+            textViewEpisodeNumber.text = episode?.episode
+            textViewEpisodeAirDate.text = episode?.air_date
+            buttonBack.setOnClickListener {
+                navigator.goBack()
+            }
         }
-        recyclerView.adapter = adapterCharacter
+        getCharactersList(episode)
     }
 
-    private fun updateUI(episode: EpisodeInfo?) {
-        binding.textViewEpisodeName.text = episode?.name
-        binding.textViewEpisodeNumber.text = episode?.episode
-        binding.textViewEpisodeAirDate.text = episode?.air_date
-        binding.buttonBack.setOnClickListener {
-            navigator.goBack()
-        }
-        recyclerView = binding.recyclerviewCharactersInEpisode
+    private fun getCharactersList(episode: EpisodeInfo?) {
         episode?.characters?.let { viewModelEpisode.getCharactersById(it) }
         viewModelEpisode.charactersListLiveData.observe(viewLifecycleOwner) {
             it. let {
                 charactersList = it as ArrayList<CharacterInfo>
-
                 adapterCharacter.updateList(charactersList)
             }
         }
-        initializeRecyclerView(charactersList)
+        initializeRecyclerView()
+    }
+
+    private fun initializeRecyclerView() {
+        with(binding) {
+            with(recyclerviewCharactersInEpisode) {
+                layoutManager = StaggeredGridLayoutManager(2, 1)
+                adapter = adapterCharacter
+            }
+        }
     }
 
     companion object {
@@ -110,9 +120,8 @@ class FragmentEpisodeDetail: Fragment() {
             return FragmentEpisodeDetail().also {
                 it.arguments = Bundle() .apply {
                     putInt(KEY_EPISODE, episodeInfo.id)
-                } }
+                }
+            }
         }
-
-
     }
 }

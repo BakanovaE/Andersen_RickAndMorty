@@ -29,15 +29,15 @@ class FragmentLocationDetail: Fragment() {
     private lateinit var binding: FragmentLocationDetailBinding
     private var location: LocationInfo? = null
     private lateinit var navigator: Navigator
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var layoutManager: StaggeredGridLayoutManager
-    private lateinit var adapterCharacter: AdapterCharacter
+    private var adapterCharacter = AdapterCharacter {
+            character -> val fragmentCharacterDetails = FragmentCharacterDetail.newInstance(character)
+        navigator.navigate(fragmentCharacterDetails)
+    }
     private var charactersList = ArrayList<CharacterInfo>()
 
     @Inject
     lateinit var factory: ViewModelLocationFactory
-
-    val viewModelLocation by viewModels<ViewModelLocation>(factoryProducer = { factory })
+    private val viewModelLocation by viewModels<ViewModelLocation>(factoryProducer = { factory })
 
     override fun onAttach(context: Context) {
         context.appComponent.inject(this)
@@ -60,8 +60,15 @@ class FragmentLocationDetail: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         val id = requireArguments().getInt(KEY_LOCATION)
+
         viewModelLocation.getLocationById(id)
+
+        observeLiveData()
+    }
+
+    private fun observeLiveData() {
         viewModelLocation.location.observe(viewLifecycleOwner) {
             it.let {
                 location = it as LocationInfo
@@ -75,34 +82,38 @@ class FragmentLocationDetail: Fragment() {
         }
     }
 
-    private fun initializeRecyclerView(charactersList: ArrayList<CharacterInfo>) {
-        layoutManager = StaggeredGridLayoutManager(2, 1)
-        recyclerView.layoutManager = layoutManager
-        adapterCharacter = AdapterCharacter() {
-                character -> val fragmentCharacterDetails = FragmentCharacterDetail.newInstance(character)
-            navigator.navigate(fragmentCharacterDetails)
+    private fun updateUI(location: LocationInfo?) {
+        with(binding) {
+            textViewLocationName.text = location?.name
+            textViewLocationType.text =
+                if (location?.type?.isEmpty() == true) "unknown" else location?.type
+            textViewLocationDimension.text =
+                if (location?.dimension?.isEmpty() == true) "unknown" else location?.dimension
+            buttonBack.setOnClickListener {
+                navigator.goBack()
+            }
         }
-        recyclerView.adapter = adapterCharacter
+        getCharactersList(location)
     }
 
-    private fun updateUI(location: LocationInfo?) {
-        binding.textViewLocationName.text = location?.name
-        binding.textViewLocationType.text = if (location?.type?.isEmpty() == true) "unknown" else location?.type
-        binding.textViewLocationDimension.text = if (location?.dimension?.isEmpty() == true) "unknown" else location?.dimension
-        binding.buttonBack.setOnClickListener {
-            navigator.goBack()
-        }
-
-        recyclerView = binding.recyclerviewCharactersInLocation
+    private fun getCharactersList(location: LocationInfo?) {
         location?.characters?.let { viewModelLocation.getCharactersById(it) }
         viewModelLocation.charactersListLiveData.observe(viewLifecycleOwner) {
             it. let {
                 charactersList = it as ArrayList<CharacterInfo>
-
                 adapterCharacter.updateList(charactersList)
             }
         }
-        initializeRecyclerView(charactersList)
+        initializeRecyclerView()
+    }
+
+    private fun initializeRecyclerView() {
+        with(binding) {
+            with(recyclerviewCharactersInLocation) {
+                layoutManager = StaggeredGridLayoutManager(2, 1)
+                adapter = adapterCharacter
+            }
+        }
     }
 
     companion object {

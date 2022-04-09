@@ -1,17 +1,14 @@
 package org.martellina.rickandmorty.data
 
-import android.content.Context
 import org.martellina.rickandmorty.data.dao.CharacterDao
 import org.martellina.rickandmorty.data.dao.EpisodeDao
 import org.martellina.rickandmorty.data.dao.LocationDao
-import org.martellina.rickandmorty.data.dao.LocationDao_Impl
 import org.martellina.rickandmorty.data.mappers.CharacterMapper
 import org.martellina.rickandmorty.data.mappers.EpisodeMapper
 import org.martellina.rickandmorty.data.mappers.LocationMapper
 import org.martellina.rickandmorty.network.api.CharactersApi
 import org.martellina.rickandmorty.network.api.EpisodesApi
 import org.martellina.rickandmorty.network.api.LocationsApi
-import org.martellina.rickandmorty.network.retrofit.Common
 import org.martellina.rickandmorty.network.model.*
 import retrofit2.await
 import java.lang.Exception
