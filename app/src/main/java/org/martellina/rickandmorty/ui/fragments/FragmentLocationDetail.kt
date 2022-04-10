@@ -1,15 +1,18 @@
 package org.martellina.rickandmorty.ui.fragments
 
 import android.content.Context
+import android.opengl.Visibility
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import org.martellina.rickandmorty.R
 import org.martellina.rickandmorty.appComponent
 import org.martellina.rickandmorty.databinding.FragmentLocationDetailBinding
 import org.martellina.rickandmorty.di.factory.ViewModelEpisodesFactory
@@ -55,6 +58,7 @@ class FragmentLocationDetail: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentLocationDetailBinding.inflate(inflater, container, false)
+        binding.textViewNoCharacters.visibility = View.GONE
         return binding.root
     }
 
@@ -68,6 +72,7 @@ class FragmentLocationDetail: Fragment() {
         }
 
         observeLiveData()
+
         initializeRecyclerView()
     }
 
@@ -96,8 +101,14 @@ class FragmentLocationDetail: Fragment() {
                 navigator.goBack()
             }
         }
-        if(charactersList.isNullOrEmpty()) {
-            getCharactersList(location)
+        if (location?.characters.isNullOrEmpty()) {
+            binding.recyclerviewCharactersInLocation.visibility = View.GONE
+            binding.textViewNoCharacters.visibility = View.VISIBLE
+
+        } else {
+            if (charactersList.isNullOrEmpty()) {
+                getCharactersList(location)
+            }
         }
     }
 

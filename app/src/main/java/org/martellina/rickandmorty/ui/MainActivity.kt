@@ -32,9 +32,11 @@ class MainActivity : AppCompatActivity(), Navigator {
 //                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
 //        decorView.systemUiVisibility = uiOptions
 
-        supportFragmentManager.beginTransaction().run {
-            replace(R.id.fragment_container, FragmentCharacters.newInstance())
-            commit()
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction().run {
+                replace(R.id.fragment_container, FragmentCharacters.newInstance())
+                commit()
+            }
         }
 
         binding.bottomNavigation.setOnItemSelectedListener { item ->

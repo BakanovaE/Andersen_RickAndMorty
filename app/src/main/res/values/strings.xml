@@ -51,4 +51,6 @@
     <string name="toast_empty_filter">Filter is empty</string>
     <string name="toast_same_filter">Same filter</string>
 
+    <string name="no_characters">There is no characters in this location</string>
+
 </resources>
