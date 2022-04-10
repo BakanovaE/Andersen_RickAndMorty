@@ -1,6 +1,7 @@
 package org.martellina.rickandmorty.ui.fragments
 
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -33,6 +34,7 @@ class FragmentEpisodes: Fragment() {
     private var filter = EpisodesFilter()
     private var page = 1
     private var pages = 1
+    private var orientation = 0
 
     @Inject
     lateinit var factory: ViewModelEpisodesFactory
@@ -59,6 +61,9 @@ class FragmentEpisodes: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        orientation = resources.configuration.orientation
+        setBackground(orientation)
 
         if (episodesList.isNullOrEmpty()) {
             page = 1
@@ -142,6 +147,24 @@ class FragmentEpisodes: Fragment() {
     fun getFilteredEpisodes(filter: EpisodesFilter) {
         viewModelEpisodes.getFilteredEpisodes(filter)
         this.filter = filter
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        orientation = newConfig.orientation
+        setBackground(orientation)
+    }
+
+    private fun setBackground(orientation: Int) {
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE)
+            binding.root.setBackgroundResource(R.drawable.background_land_jpg)
+        else if (orientation == Configuration.ORIENTATION_PORTRAIT)
+            binding.root.setBackgroundResource(R.drawable.background_jpg)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setBackground(orientation)
     }
 
     companion object {
