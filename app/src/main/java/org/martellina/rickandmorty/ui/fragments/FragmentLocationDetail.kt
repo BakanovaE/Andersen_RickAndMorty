@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
@@ -88,6 +89,23 @@ class FragmentLocationDetail: Fragment() {
                 binding.progressBar.apply { visibility = if (it) View.VISIBLE else View.GONE }
             }
         }
+        viewModelLocation.isNoCharacters.observe(viewLifecycleOwner) {
+            it.let {
+                binding.recyclerviewCharactersInLocation.apply { visibility = if (it) View.GONE else View.VISIBLE }
+                binding.textViewNoCharacters.apply { visibility = if (it) View.VISIBLE else View.GONE }
+
+            }
+        }
+        viewModelLocation.isNoCharactersFound.observe(viewLifecycleOwner) {
+            it.let {
+                if (it) Toast.makeText(requireContext(), R.string.toast_characters_in_location, Toast.LENGTH_SHORT).show()
+            }
+        }
+        viewModelLocation.isNotEnoughCharactersFound.observe(viewLifecycleOwner) {
+            it.let {
+                if (it)Toast.makeText(requireContext(),R.string.toast_more_characters_in_location,Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun updateUI(location: LocationInfo?) {
@@ -101,15 +119,9 @@ class FragmentLocationDetail: Fragment() {
                 navigator.goBack()
             }
         }
-        if (location?.characters.isNullOrEmpty()) {
-            binding.recyclerviewCharactersInLocation.visibility = View.GONE
-            binding.textViewNoCharacters.visibility = View.VISIBLE
-
-        } else {
             if (charactersList.isNullOrEmpty()) {
                 getCharactersList(location)
             }
-        }
     }
 
     private fun getCharactersList(location: LocationInfo?) {

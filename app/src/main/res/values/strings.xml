@@ -53,4 +53,13 @@
 
     <string name="no_characters">There is no characters in this location</string>
 
+    <string name="toast_more_episodes_in_character">There is more episodes, connect to network to receive them</string>
+    <string name="toast_more_characters_in_location">There is more characters in this location, connect to network to receive them</string>
+    <string name="toast_more_characters_in_episode">There is more characters in this episode, connect to network to receive them</string>
+
+    <string name="toast_characters_in_location">There is characters in this location, connect to network to receive them</string>
+    <string name="toast_characters_in_episode">There is characters in this episode, connect to network to receive them</string>
+    <string name="toast_episodes_in_character">There is characters in this location, connect to network to receive them</string>
+
+
 </resources>

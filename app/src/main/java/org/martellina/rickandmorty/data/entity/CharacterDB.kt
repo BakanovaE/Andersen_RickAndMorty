@@ -23,7 +23,7 @@ data class CharacterDB (
         val locationUrl: String,
         val image: String,
         @field:TypeConverters(EpisodesConverter::class)
-        val episode: List<String>?
+        val episode: List<String>
         ) {
 
 }

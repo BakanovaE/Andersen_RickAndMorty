@@ -27,11 +27,11 @@ class ViewModelEpisode @Inject constructor(private val repository: Repository): 
         }
     }
 
-    fun getCharactersById(charactersList: List<String>) {
+    fun getCharactersById(charactersUrlList: List<String>) {
         isLoading.value = true
         viewModelScope.launch(Dispatchers.IO) {
             val result = ArrayList<CharacterInfo>()
-            for (characterUrl in charactersList) {
+            for (characterUrl in charactersUrlList) {
                 val id = characterUrl.split("/").last().toInt()
                 val character = repository.getCharacterById(id)
                 character?.let { result.add(it) }

@@ -22,5 +22,5 @@ data class CharacterInfo (
     @SerializedName("location")
     val location: CharacterLocation,
     @SerializedName("episode")
-    val episode: List<String>?
+    val episode: List<String>
 )

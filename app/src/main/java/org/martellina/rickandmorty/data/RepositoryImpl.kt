@@ -75,10 +75,14 @@ class RepositoryImpl @Inject constructor(private val episodesApi: EpisodesApi,
     }
 
     override suspend fun getEpisodeById(id: Int): EpisodeInfo? {
-        val result: EpisodeInfo? = try {
-            episodesApi.getEpisodeById(id).await()
+        var result: EpisodeInfo? = null
+        try {
+            result = episodesApi.getEpisodeById(id).await()
         } catch (e: Exception) {
-            episodeMapper.mapFromDBToNetwork(episodeDao.getEpisodeById(id))
+            val episode = episodeDao.getEpisodeById(id)
+            if(episode !=null) {
+                result = episodeMapper.mapFromDBToNetwork(episode)
+            }
         }
         return result
     }

@@ -27,14 +27,14 @@ class ViewModelCharacter @Inject constructor(private val repository: Repository)
         }
     }
 
-    fun getEpisodesById(episodesList: List<String>) {
+    fun getEpisodesById(episodesUrlList: List<String>) {
         isLoading.value = true
         viewModelScope.launch(Dispatchers.IO) {
             val result = ArrayList<EpisodeInfo>()
-            for (episodeUrl in episodesList) {
-                val id = episodeUrl.split("/").last().toInt()
-                val episode = repository.getEpisodeById(id)
-                episode?.let { result.add(it) }
+            for (episodeUrl in episodesUrlList) {
+                    val id = episodeUrl.split("/").last().toInt()
+                    val episode = repository.getEpisodeById(id)
+                    episode?.let { result.add(it) }
             }
             launch(Dispatchers.Main) {
                 updateEpisodesListLiveData(result)
