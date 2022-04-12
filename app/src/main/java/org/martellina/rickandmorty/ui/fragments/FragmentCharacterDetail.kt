@@ -36,6 +36,7 @@ class FragmentCharacterDetail: Fragment(R.layout.fragment_character_detail) {
     @Inject
     lateinit var factory: ViewModelCharacterFactory
     private val viewModelCharacter by viewModels<ViewModelCharacter>(factoryProducer = { factory })
+    private var characterId = 0
 
     override fun onAttach(context: Context) {
         context.appComponent.inject(this)
@@ -60,14 +61,15 @@ class FragmentCharacterDetail: Fragment(R.layout.fragment_character_detail) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val id = requireArguments().getInt(KEY_CHARACTER)
+        characterId = requireArguments().getInt(KEY_CHARACTER)
 
         if(character == null) {
-            viewModelCharacter.getCharacterById(id)
+            viewModelCharacter.getCharacterById(characterId)
         }
 
         observeLiveData()
         initializeRecyclerView()
+        initializeSwipeRefreshLayout()
     }
 
     private fun observeLiveData() {
@@ -155,6 +157,13 @@ class FragmentCharacterDetail: Fragment(R.layout.fragment_character_detail) {
                 layoutManager = LinearLayoutManager(context)
                 adapter = adapterEpisode
             }
+        }
+    }
+
+    private fun initializeSwipeRefreshLayout() {
+        binding.swipeRefreshLayoutCharacter.setOnRefreshListener {
+            viewModelCharacter.getCharacterById(characterId)
+            binding.swipeRefreshLayoutCharacter.isRefreshing = false
         }
     }
 

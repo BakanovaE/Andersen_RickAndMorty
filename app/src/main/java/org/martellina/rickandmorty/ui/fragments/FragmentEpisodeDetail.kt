@@ -8,20 +8,16 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import org.martellina.rickandmorty.R
 import org.martellina.rickandmorty.appComponent
 import org.martellina.rickandmorty.databinding.FragmentEpisodeDetailBinding
 import org.martellina.rickandmorty.di.factory.ViewModelEpisodeFactory
-import org.martellina.rickandmorty.di.factory.ViewModelEpisodesFactory
 import org.martellina.rickandmorty.network.model.CharacterInfo
 import org.martellina.rickandmorty.network.model.EpisodeInfo
 import org.martellina.rickandmorty.ui.Navigator
 import org.martellina.rickandmorty.ui.adapters.AdapterCharacter
 import org.martellina.rickandmorty.ui.viewmodels.ViewModelEpisode
-import org.martellina.rickandmorty.ui.viewmodels.ViewModelEpisodes
 import javax.inject.Inject
 
 
@@ -37,6 +33,7 @@ class FragmentEpisodeDetail: Fragment() {
         navigator.navigate(fragmentCharacterDetails)
     }
     private var charactersList = ArrayList<CharacterInfo>()
+    private var episodeId = 0
 
     @Inject
     lateinit var factory: ViewModelEpisodeFactory
@@ -65,14 +62,15 @@ class FragmentEpisodeDetail: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val id = requireArguments().getInt(KEY_EPISODE)
+        episodeId = requireArguments().getInt(KEY_EPISODE)
 
         if (episode == null) {
-            viewModelEpisode.getEpisodeById(id)
+            viewModelEpisode.getEpisodeById(episodeId)
         }
 
         observeLiveData()
         initializeRecyclerView()
+        initializeSwipeRefreshLayout()
     }
 
     private fun observeLiveData() {
@@ -131,6 +129,14 @@ class FragmentEpisodeDetail: Fragment() {
                 layoutManager = StaggeredGridLayoutManager(2, 1)
                 adapter = adapterCharacter
             }
+        }
+    }
+
+
+    private fun initializeSwipeRefreshLayout() {
+        binding.swipeRefreshLayoutEpisode.setOnRefreshListener {
+            viewModelEpisode.getEpisodeById(episodeId)
+            binding.swipeRefreshLayoutEpisode.isRefreshing = false
         }
     }
 

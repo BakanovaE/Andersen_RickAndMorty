@@ -32,6 +32,7 @@ class FragmentLocationDetail: Fragment() {
         navigator.navigate(fragmentCharacterDetails)
     }
     private var charactersList = ArrayList<CharacterInfo>()
+    private var locationId = 0
 
     @Inject
     lateinit var factory: ViewModelLocationFactory
@@ -60,15 +61,15 @@ class FragmentLocationDetail: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val id = requireArguments().getInt(KEY_LOCATION)
+        locationId = requireArguments().getInt(KEY_LOCATION)
 
         if (location == null) {
-            viewModelLocation.getLocationById(id)
+            viewModelLocation.getLocationById(locationId)
         }
 
         observeLiveData()
-
         initializeRecyclerView()
+        initializeSwipeRefreshLayout()
     }
 
     private fun observeLiveData() {
@@ -129,6 +130,13 @@ class FragmentLocationDetail: Fragment() {
                 layoutManager = StaggeredGridLayoutManager(2, 1)
                 adapter = adapterCharacter
             }
+        }
+    }
+
+    private fun initializeSwipeRefreshLayout() {
+        binding.swipeRefreshLayoutLocation.setOnRefreshListener {
+            viewModelLocation.getLocationById(locationId)
+            binding.swipeRefreshLayoutLocation.isRefreshing = false
         }
     }
 
