@@ -1,28 +1,22 @@
 package org.martellina.rickandmorty.ui.fragments
 
 import android.content.Context
-import android.opengl.Visibility
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import org.martellina.rickandmorty.R
 import org.martellina.rickandmorty.appComponent
 import org.martellina.rickandmorty.databinding.FragmentLocationDetailBinding
-import org.martellina.rickandmorty.di.factory.ViewModelEpisodesFactory
 import org.martellina.rickandmorty.di.factory.ViewModelLocationFactory
 import org.martellina.rickandmorty.network.model.CharacterInfo
 import org.martellina.rickandmorty.network.model.LocationInfo
 import org.martellina.rickandmorty.ui.Navigator
 import org.martellina.rickandmorty.ui.adapters.AdapterCharacter
-import org.martellina.rickandmorty.ui.viewmodels.ViewModelEpisodes
 import org.martellina.rickandmorty.ui.viewmodels.ViewModelLocation
 import javax.inject.Inject
 
@@ -96,14 +90,9 @@ class FragmentLocationDetail: Fragment() {
 
             }
         }
-        viewModelLocation.isNoCharactersFound.observe(viewLifecycleOwner) {
-            it.let {
-                if (it) Toast.makeText(requireContext(), R.string.toast_characters_in_location, Toast.LENGTH_SHORT).show()
-            }
-        }
         viewModelLocation.isNotEnoughCharactersFound.observe(viewLifecycleOwner) {
             it.let {
-                if (it)Toast.makeText(requireContext(),R.string.toast_more_characters_in_location,Toast.LENGTH_SHORT).show()
+                if (it)Toast.makeText(requireContext(),R.string.toast_more_characters,Toast.LENGTH_SHORT).show()
             }
         }
     }

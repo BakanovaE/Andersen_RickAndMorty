@@ -53,6 +53,7 @@ class FragmentCharacterDetail: Fragment(R.layout.fragment_character_detail) {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentCharacterDetailBinding.inflate(inflater, container, false)
+        binding.textViewNoCharacters.visibility = View.GONE
         return binding.root
     }
 
@@ -79,6 +80,18 @@ class FragmentCharacterDetail: Fragment(R.layout.fragment_character_detail) {
         viewModelCharacter.isLoading.observe(viewLifecycleOwner) {
             it.let {
                 binding.progressBar.apply { visibility = if (it) View.VISIBLE else View.GONE }
+            }
+        }
+        viewModelCharacter.isNoEpisodes.observe(viewLifecycleOwner) {
+            it.let {
+                binding.recyclerviewEpisodesInCharacter.apply { visibility = if (it) View.GONE else View.VISIBLE }
+                binding.textViewNoCharacters.apply { visibility = if (it) View.VISIBLE else View.GONE }
+
+            }
+        }
+        viewModelCharacter.isNotEnoughEpisodesFound.observe(viewLifecycleOwner) {
+            it.let {
+                if (it) Toast.makeText(requireContext(), R.string.toast_more_episodes_in_character, Toast.LENGTH_SHORT).show()
             }
         }
     }

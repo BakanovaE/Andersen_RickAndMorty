@@ -5,11 +5,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import org.martellina.rickandmorty.R
 import org.martellina.rickandmorty.appComponent
 import org.martellina.rickandmorty.databinding.FragmentEpisodeDetailBinding
 import org.martellina.rickandmorty.di.factory.ViewModelEpisodeFactory
@@ -56,6 +58,7 @@ class FragmentEpisodeDetail: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentEpisodeDetailBinding.inflate(inflater, container, false)
+        binding.textViewNoCharacters.visibility = View.GONE
         return binding.root
     }
 
@@ -82,6 +85,18 @@ class FragmentEpisodeDetail: Fragment() {
         viewModelEpisode.isLoading.observe(viewLifecycleOwner) {
             it.let {
                 binding.progressBar.apply { visibility = if (it) View.VISIBLE else View.GONE }
+            }
+        }
+        viewModelEpisode.isNoCharacters.observe(viewLifecycleOwner) {
+            it.let {
+                binding.recyclerviewCharactersInEpisode.apply { visibility = if (it) View.GONE else View.VISIBLE }
+                binding.textViewNoCharacters.apply { visibility = if (it) View.VISIBLE else View.GONE }
+
+            }
+        }
+        viewModelEpisode.isNotEnoughCharactersFound.observe(viewLifecycleOwner) {
+            it.let {
+                if (it) Toast.makeText(requireContext(), R.string.toast_more_characters, Toast.LENGTH_SHORT).show()
             }
         }
     }

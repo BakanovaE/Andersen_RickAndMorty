@@ -71,6 +71,17 @@
             app:layout_constraintTop_toTopOf="parent" />
 
 
+        <TextView
+            android:id="@+id/textView_no_characters"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/no_characters_in_episode"
+            android:textSize="@dimen/info_text_view"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_view_episode_air_date" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

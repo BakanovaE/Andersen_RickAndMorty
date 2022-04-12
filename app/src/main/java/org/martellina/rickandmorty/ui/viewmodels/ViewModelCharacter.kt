@@ -15,6 +15,9 @@ class ViewModelCharacter @Inject constructor(private val repository: Repository)
     var characterLiveData = MutableLiveData<CharacterInfo>()
     var episodesListLiveData = MutableLiveData<List<EpisodeInfo>>()
     var isLoading = MutableLiveData<Boolean>()
+    var isNoEpisodes = MutableLiveData<Boolean>()
+    var isNotEnoughEpisodesFound = MutableLiveData<Boolean>()
+
 
     fun getCharacterById(id: Int) {
         isLoading.value = true
@@ -37,19 +40,33 @@ class ViewModelCharacter @Inject constructor(private val repository: Repository)
                     episode?.let { result.add(it) }
             }
             launch(Dispatchers.Main) {
-                updateEpisodesListLiveData(result)
+                updateEpisodesListLiveData(result, episodesUrlList)
             }
         }
     }
 
-    private fun updateEpisodesListLiveData(episodesList: List<EpisodeInfo>?) {
+    private fun updateEpisodesListLiveData(episodesList: List<EpisodeInfo>?, episodesUrlList: List<String>) {
         this.episodesListLiveData.value = episodesList
         isLoading.value = false
+        if (episodesList.isNullOrEmpty()) {
+            updateIsNoEpisodes()
+        } else if (episodesList.size < episodesUrlList.size) {
+            updateIsNotEnoughEpisodesFound()
+        }
     }
 
     private fun updateCharacterLiveData(character: CharacterInfo?) {
         this.characterLiveData.value = character
         isLoading.value = false
+    }
+
+
+    private fun updateIsNoEpisodes() {
+        isNoEpisodes.value = true
+    }
+
+    private fun updateIsNotEnoughEpisodesFound() {
+        isNotEnoughEpisodesFound.value = true
     }
 
 }

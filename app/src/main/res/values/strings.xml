@@ -51,15 +51,11 @@
     <string name="toast_empty_filter">Filter is empty</string>
     <string name="toast_same_filter">Same filter</string>
 
-    <string name="no_characters">There is no characters in this location</string>
+    <string name="no_characters_in_location">There is no characters in this location</string>
+    <string name="no_characters_in_episode">There is no characters in this episode</string>
+    <string name="no_episodes_in_character">There is no episodes with this character</string>
 
-    <string name="toast_more_episodes_in_character">There is more episodes, connect to network to receive them</string>
-    <string name="toast_more_characters_in_location">There is more characters in this location, connect to network to receive them</string>
-    <string name="toast_more_characters_in_episode">There is more characters in this episode, connect to network to receive them</string>
-
-    <string name="toast_characters_in_location">There is characters in this location, connect to network to receive them</string>
-    <string name="toast_characters_in_episode">There is characters in this episode, connect to network to receive them</string>
-    <string name="toast_episodes_in_character">There is characters in this location, connect to network to receive them</string>
-
+    <string name="toast_more_episodes_in_character">Connect to network to receive all episodes</string>
+    <string name="toast_more_characters">Connect to network to receive all characters</string>
 
 </resources>

@@ -16,7 +16,6 @@ class ViewModelLocation @Inject constructor(private val repository: Repository):
     var charactersListLiveData = MutableLiveData<List<CharacterInfo>>()
     var isLoading = MutableLiveData<Boolean>()
     var isNoCharacters = MutableLiveData<Boolean>()
-    var isNoCharactersFound = MutableLiveData<Boolean>()
     var isNotEnoughCharactersFound = MutableLiveData<Boolean>()
 
     fun getLocationById(id: Int) {
@@ -52,6 +51,8 @@ class ViewModelLocation @Inject constructor(private val repository: Repository):
         isLoading.value = false
         if (charactersList.isNullOrEmpty()) {
             updateIsNoCharacters()
+        } else if (charactersList.size < charactersUrlList.size) {
+            updateIsNotEnoughCharactersFound()
         }
     }
 
@@ -63,13 +64,9 @@ class ViewModelLocation @Inject constructor(private val repository: Repository):
     private fun updateIsNoCharacters() {
         isNoCharacters.value = true
     }
-//
-//    private fun updateIsNoCharactersFound() {
-//        isNoCharactersFound.value = true
-//    }
-//
-//    private fun updateIsNotEnoughCharactersFound() {
-//        isNotEnoughCharactersFound.value = true
-//    }
+
+    private fun updateIsNotEnoughCharactersFound() {
+        isNotEnoughCharactersFound.value = true
+    }
 
 }
