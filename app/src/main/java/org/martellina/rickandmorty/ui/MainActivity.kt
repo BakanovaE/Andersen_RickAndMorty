@@ -6,7 +6,14 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.navigateUp
+import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.martellina.rickandmorty.R
 import org.martellina.rickandmorty.databinding.ActivityMainBinding
 import org.martellina.rickandmorty.ui.fragments.FragmentCharacters
@@ -14,9 +21,11 @@ import org.martellina.rickandmorty.ui.fragments.FragmentEpisodes
 import org.martellina.rickandmorty.ui.fragments.FragmentLocations
 
 
-class MainActivity : AppCompatActivity(), Navigator {
+class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var navController: NavController
+    private lateinit var appBarConfiguration: AppBarConfiguration
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.Theme_RickAndMorty)
@@ -26,37 +35,25 @@ class MainActivity : AppCompatActivity(), Navigator {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction().run {
-                replace(R.id.nav_host_fragment, FragmentCharacters.newInstance())
-                commit()
-            }
-        }
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        navController = navHostFragment.navController
 
-        binding.bottomNavigation.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.characters -> navigate(FragmentCharacters.newInstance())
-                R.id.episodes -> navigate(FragmentEpisodes.newInstance())
-                R.id.locations -> navigate(FragmentLocations.newInstance())
-            }
-            true
-        }
+        appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.character_nav_graph,
+                R.id.episode_nav_graph,
+                R.id.location_nav_graph
+            )
+        )
+        appBarConfiguration = AppBarConfiguration(navController.graph)
+
+        val navView = binding.bottomNavigation
+        navView.setupWithNavController(navController)
+
     }
 
-    override fun navigate(fragment: Fragment) {
-        supportFragmentManager.beginTransaction().run {
-            replace(R.id.nav_host_fragment, fragment)
-            addToBackStack(null)
-            commit()
-        }
-    }
-
-    override fun goBack() {
-        onBackPressed()
-    }
-
-    private fun isConnected(): Boolean? {
-        val connectivityManager = applicationContext.getSystemService( Context.CONNECTIVITY_SERVICE ) as ConnectivityManager
-        return connectivityManager.activeNetworkInfo?.isConnected
+   override fun onSupportNavigateUp(): Boolean {
+        return navController.navigateUp(appBarConfiguration)
     }
 }

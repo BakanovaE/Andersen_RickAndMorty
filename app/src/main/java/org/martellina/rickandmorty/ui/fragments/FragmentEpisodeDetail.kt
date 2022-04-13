@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import org.martellina.rickandmorty.R
 import org.martellina.rickandmorty.appComponent
@@ -27,12 +29,12 @@ class FragmentEpisodeDetail: Fragment() {
 
     private lateinit var binding: FragmentEpisodeDetailBinding
     private var episode: EpisodeInfo? = null
-    private lateinit var navigator: Navigator
-    private var adapterCharacter = AdapterCharacter {
-            character -> val fragmentCharacterDetails = FragmentCharacterDetail.newInstance(character)
-        navigator.navigate(fragmentCharacterDetails)
+    private var adapterCharacter = AdapterCharacter { character ->
+        val action = FragmentEpisodeDetailDirections.actionFragmentEpisodeDetailToFragmentCharacterDetail(character)
+        findNavController().navigate(action)
     }
     private var charactersList = ArrayList<CharacterInfo>()
+    private val args: FragmentEpisodeDetailArgs by navArgs()
     private var episodeId = 0
 
     @Inject
@@ -42,11 +44,6 @@ class FragmentEpisodeDetail: Fragment() {
     override fun onAttach(context: Context) {
         context.appComponent.inject(this)
         super.onAttach(context)
-        if (context is Navigator) {
-            navigator = context
-        } else {
-            error("Host should implement Navigator")
-        }
     }
 
     override fun onCreateView(
@@ -62,7 +59,7 @@ class FragmentEpisodeDetail: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        episodeId = requireArguments().getInt(KEY_EPISODE)
+        episodeId = args.episode.id
 
         if (episode == null) {
             viewModelEpisode.getEpisodeById(episodeId)
@@ -105,7 +102,7 @@ class FragmentEpisodeDetail: Fragment() {
             textViewEpisodeNumber.text = episode?.episode
             textViewEpisodeAirDate.text = episode?.air_date
             buttonBack.setOnClickListener {
-                navigator.goBack()
+                findNavController().popBackStack()
             }
         }
         if (charactersList.isNullOrEmpty()) {

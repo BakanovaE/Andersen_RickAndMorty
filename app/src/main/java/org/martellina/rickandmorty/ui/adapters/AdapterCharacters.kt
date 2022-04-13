@@ -7,7 +7,7 @@ import com.squareup.picasso.Picasso
 import org.martellina.rickandmorty.databinding.CharacterItemBinding
 import org.martellina.rickandmorty.network.model.CharacterInfo
 
-class AdapterCharacters(private val onClickListener: (CharacterInfo) -> Unit)
+class AdapterCharacters(private val onClickListener: (character: CharacterInfo) -> Unit)
     : RecyclerView.Adapter<AdapterCharacters.ViewHolderCharacters>() {
 
     private val charactersList = ArrayList<CharacterInfo>()
@@ -21,7 +21,7 @@ class AdapterCharacters(private val onClickListener: (CharacterInfo) -> Unit)
                 textViewCharacterStatus.text = character.status
                 textViewCharacterSpecies.text = character.species
                 root.setOnClickListener {
-                    onClickListener.invoke(charactersList[adapterPosition])
+                    onClickListener(character)
                 }
                 Picasso.get()
                     .load(character.image)

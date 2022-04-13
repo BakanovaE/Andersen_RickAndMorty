@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import org.martellina.rickandmorty.R
@@ -26,14 +27,14 @@ class FragmentCharacters: Fragment(R.layout.fragment_characters) {
 
     private lateinit var binding: FragmentCharactersBinding
     private var charactersList = ArrayList<CharacterInfo>()
-    private lateinit var navigator: Navigator
     private var filter = CharactersFilter()
     private var page = 1
     private var pages = 1
     private var orientation = 0
-    private var adapterCharacters = AdapterCharacters() { location ->
-        val fragmentCharacterDetails = FragmentCharacterDetail.newInstance(location)
-        navigator.navigate(fragmentCharacterDetails)
+    private var adapterCharacters = AdapterCharacters { character ->
+        val action =
+            FragmentCharactersDirections.actionFragmentCharactersToFragmentCharacterDetail(character)
+        findNavController().navigate(action)
     }
 
     @Inject
@@ -43,11 +44,6 @@ class FragmentCharacters: Fragment(R.layout.fragment_characters) {
     override fun onAttach(context: Context) {
         context.appComponent.inject(this)
         super.onAttach(context)
-        if (context is Navigator) {
-            navigator = context
-        } else {
-            error ("Host should implements Navigator")
-        }
     }
 
     override fun onCreateView(

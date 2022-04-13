@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import org.martellina.rickandmorty.R
 import org.martellina.rickandmorty.appComponent
@@ -26,13 +28,13 @@ class FragmentLocationDetail: Fragment() {
 
     private lateinit var binding: FragmentLocationDetailBinding
     private var location: LocationInfo? = null
-    private lateinit var navigator: Navigator
-    private var adapterCharacter = AdapterCharacter {
-            character -> val fragmentCharacterDetails = FragmentCharacterDetail.newInstance(character)
-        navigator.navigate(fragmentCharacterDetails)
+    private var adapterCharacter = AdapterCharacter {character ->
+        val action = FragmentLocationDetailDirections.actionFragmentLocationDetailToFragmentCharacterDetail(character)
+        findNavController().navigate(action)
     }
     private var charactersList = ArrayList<CharacterInfo>()
     private var locationId = 0
+    private val args: FragmentLocationDetailArgs by navArgs()
 
     @Inject
     lateinit var factory: ViewModelLocationFactory
@@ -41,11 +43,6 @@ class FragmentLocationDetail: Fragment() {
     override fun onAttach(context: Context) {
         context.appComponent.inject(this)
         super.onAttach(context)
-        if (context is Navigator) {
-            navigator = context
-        } else {
-            error("Host should implement Navigator")
-        }
     }
 
     override fun onCreateView(
@@ -61,7 +58,7 @@ class FragmentLocationDetail: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        locationId = requireArguments().getInt(KEY_LOCATION)
+        locationId = args.locationId
 
         if (location == null) {
             viewModelLocation.getLocationById(locationId)
@@ -106,7 +103,7 @@ class FragmentLocationDetail: Fragment() {
             textViewLocationDimension.text =
                 if (location?.dimension?.isEmpty() == true) "unknown" else location?.dimension
             buttonBack.setOnClickListener {
-                navigator.goBack()
+                findNavController().popBackStack()
             }
         }
             if (charactersList.isNullOrEmpty()) {
@@ -141,10 +138,10 @@ class FragmentLocationDetail: Fragment() {
     }
 
     companion object {
-        fun newInstance(id: Int) : FragmentLocationDetail {
+        fun newInstance(locationId: Int) : FragmentLocationDetail {
             return FragmentLocationDetail().also {
                 it.arguments = Bundle() .apply {
-                    putInt(KEY_LOCATION, id)
+                    putInt(KEY_LOCATION, locationId)
                 }
             }
         }

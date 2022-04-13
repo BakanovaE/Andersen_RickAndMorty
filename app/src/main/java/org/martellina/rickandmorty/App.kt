@@ -4,8 +4,8 @@ import android.app.Application
 import android.content.Context
 import org.martellina.rickandmorty.di.AppComponent
 import org.martellina.rickandmorty.di.AppModule
-import org.martellina.rickandmorty.di.DaggerAppComponent
 import org.martellina.rickandmorty.data.RepositoryImpl
+import org.martellina.rickandmorty.di.DaggerAppComponent
 
 class App: Application() {
 

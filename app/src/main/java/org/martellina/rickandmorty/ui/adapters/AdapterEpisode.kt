@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import org.martellina.rickandmorty.databinding.EpisodeItemBinding
 import org.martellina.rickandmorty.network.model.EpisodeInfo
 
-class AdapterEpisode (private val onClickListener: (EpisodeInfo) -> Unit)
+class AdapterEpisode (private val onClickListener: (episode: EpisodeInfo) -> Unit)
     : RecyclerView.Adapter<AdapterEpisode.ViewHolderEpisodeInCharacter>() {
 
     private val episodesList = ArrayList<EpisodeInfo>()
@@ -20,7 +20,7 @@ class AdapterEpisode (private val onClickListener: (EpisodeInfo) -> Unit)
                 textViewEpisodeNumber.text = episode.episode
                 textViewEpisodeAirDate.text = episode.air_date
                 root.setOnClickListener {
-                    onClickListener.invoke(episodesList[adapterPosition])
+                    onClickListener(episode)
                 }
             }
         }

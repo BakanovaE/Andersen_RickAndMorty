@@ -1,7 +1,10 @@
 package org.martellina.rickandmorty.network.model
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 data class EpisodeInfo(
     @SerializedName("id")
     val id: Int,
@@ -13,4 +16,4 @@ data class EpisodeInfo(
     val episode: String,
     @SerializedName("characters")
     val characters: List<String>?
-)
+) : Parcelable

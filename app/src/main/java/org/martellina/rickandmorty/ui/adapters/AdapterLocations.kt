@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import org.martellina.rickandmorty.databinding.LocationItemBinding
 import org.martellina.rickandmorty.network.model.LocationInfo
 
-class AdapterLocations(private val onClickListener: (LocationInfo) -> Unit)
+class AdapterLocations(private val onClickListener: (location: LocationInfo) -> Unit)
     : RecyclerView.Adapter<AdapterLocations.ViewHolderLocations>() {
 
     private val locationsList = ArrayList<LocationInfo>()
@@ -20,7 +20,7 @@ class AdapterLocations(private val onClickListener: (LocationInfo) -> Unit)
                 textViewLocationType.text = location.type.ifEmpty { "unknown" }
                 textViewLocationDimension.text = location.dimension.ifEmpty { "unknown" }
                 root.setOnClickListener {
-                    onClickListener.invoke(locationsList[adapterPosition])
+                    onClickListener(location)
                 }
             }
 

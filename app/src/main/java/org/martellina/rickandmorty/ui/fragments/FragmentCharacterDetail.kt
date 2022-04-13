@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.squareup.picasso.Picasso
 import org.martellina.rickandmorty.R
@@ -27,11 +29,12 @@ class FragmentCharacterDetail: Fragment(R.layout.fragment_character_detail) {
 
     private lateinit var binding: FragmentCharacterDetailBinding
     private var character: CharacterInfo? = null
-    private lateinit var navigator: Navigator
     private var episodesList = ArrayList<EpisodeInfo>()
-    private val adapterEpisode = AdapterEpisode {
-            episode -> val fragmentEpisodeDetail = FragmentEpisodeDetail.newInstance(episode.id)
-        navigator.navigate(fragmentEpisodeDetail) }
+    private val adapterEpisode = AdapterEpisode { episode ->
+        val action = FragmentCharacterDetailDirections.actionFragmentCharacterDetailToFragmentEpisodeDetail(episode)
+        findNavController().navigate(action)
+    }
+    private val args: FragmentCharacterDetailArgs by navArgs()
 
     @Inject
     lateinit var factory: ViewModelCharacterFactory
@@ -41,11 +44,6 @@ class FragmentCharacterDetail: Fragment(R.layout.fragment_character_detail) {
     override fun onAttach(context: Context) {
         context.appComponent.inject(this)
         super.onAttach(context)
-        if (context is Navigator) {
-            navigator = context
-        } else {
-            error("Host should implement Navigator")
-        }
     }
 
     override fun onCreateView(
@@ -61,7 +59,7 @@ class FragmentCharacterDetail: Fragment(R.layout.fragment_character_detail) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        characterId = requireArguments().getInt(KEY_CHARACTER)
+        characterId = args.character.id
 
         if(character == null) {
             viewModelCharacter.getCharacterById(characterId)
@@ -109,16 +107,16 @@ class FragmentCharacterDetail: Fragment(R.layout.fragment_character_detail) {
             textViewCharacterLocation.text = character?.location?.name
             Picasso.get().load(character?.image).into(imageViewCharacter)
             buttonBack.setOnClickListener {
-                navigator.goBack()
+                findNavController().popBackStack()
             }
             textViewCharacterOrigin.setOnClickListener {
                 if (character != null) {
                     if (character.origin.url.isNotEmpty()) {
-                        navigator.navigate(
-                            FragmentLocationDetail.newInstance(
+                        val action =
+                            FragmentCharacterDetailDirections.actionFragmentCharacterDetailToFragmentLocationDetail(
                                 character.origin.url.split("/").last().trim().toInt()
                             )
-                        )
+                        findNavController().navigate(action)
                     } else {
                         Toast.makeText(requireContext(), "Origin is unknown", Toast.LENGTH_SHORT).show()
                     }
@@ -127,9 +125,11 @@ class FragmentCharacterDetail: Fragment(R.layout.fragment_character_detail) {
             textViewCharacterLocation.setOnClickListener {
                 if (character != null) {
                     if (character.location.url.isNotEmpty()) {
-                        navigator.navigate(
-                            FragmentLocationDetail.newInstance(character.location.url.split("/").last().trim().toInt())
-                        )
+                        val action =
+                            FragmentCharacterDetailDirections.actionFragmentCharacterDetailToFragmentLocationDetail(
+                                character.location.url.split("/").last().trim().toInt()
+                            )
+                        findNavController().navigate(action)
                     } else {
                         Toast.makeText(requireContext(), "Location is unknown", Toast.LENGTH_SHORT).show()
                     }
