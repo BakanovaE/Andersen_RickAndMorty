@@ -141,10 +141,10 @@ class FragmentEpisodeDetail: Fragment() {
     }
 
     companion object {
-        fun newInstance(episodeInfo: EpisodeInfo) : FragmentEpisodeDetail {
+        fun newInstance(id: Int) : FragmentEpisodeDetail {
             return FragmentEpisodeDetail().also {
                 it.arguments = Bundle() .apply {
-                    putInt(KEY_EPISODE, episodeInfo.id)
+                    putInt(KEY_EPISODE, id)
                 }
             }
         }

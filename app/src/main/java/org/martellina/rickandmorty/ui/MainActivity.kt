@@ -26,15 +26,9 @@ class MainActivity : AppCompatActivity(), Navigator {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-//        Скрыть панель навигации
-//        val decorView = window.decorView
-//        val uiOptions = (View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-//                or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
-//        decorView.systemUiVisibility = uiOptions
-
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction().run {
-                replace(R.id.fragment_container, FragmentCharacters.newInstance())
+                replace(R.id.nav_host_fragment, FragmentCharacters.newInstance())
                 commit()
             }
         }
@@ -51,7 +45,7 @@ class MainActivity : AppCompatActivity(), Navigator {
 
     override fun navigate(fragment: Fragment) {
         supportFragmentManager.beginTransaction().run {
-            replace(R.id.fragment_container, fragment)
+            replace(R.id.nav_host_fragment, fragment)
             addToBackStack(null)
             commit()
         }

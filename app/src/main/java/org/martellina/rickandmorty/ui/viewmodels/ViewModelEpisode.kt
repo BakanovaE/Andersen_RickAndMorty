@@ -30,16 +30,20 @@ class ViewModelEpisode @Inject constructor(private val repository: Repository): 
     }
 
     fun getCharactersById(charactersUrlList: List<String>) {
-        isLoading.value = true
-        viewModelScope.launch(Dispatchers.IO) {
-            val result = ArrayList<CharacterInfo>()
-            for (characterUrl in charactersUrlList) {
-                val id = characterUrl.split("/").last().toInt()
-                val character = repository.getCharacterById(id)
-                character?.let { result.add(it) }
-            }
-            launch(Dispatchers.Main) {
-                updateCharactersListLiveData(result, charactersUrlList)
+        if (charactersUrlList.isNullOrEmpty()) {
+            updateIsNoCharacters()
+        }else {
+            isLoading.value = true
+            viewModelScope.launch(Dispatchers.IO) {
+                val result = ArrayList<CharacterInfo>()
+                for (characterUrl in charactersUrlList) {
+                    val id = characterUrl.split("/").last().toInt()
+                    val character = repository.getCharacterById(id)
+                    character?.let { result.add(it) }
+                }
+                launch(Dispatchers.Main) {
+                    updateCharactersListLiveData(result, charactersUrlList)
+                }
             }
         }
     }
@@ -47,10 +51,10 @@ class ViewModelEpisode @Inject constructor(private val repository: Repository): 
     private fun updateCharactersListLiveData(charactersList: List<CharacterInfo>?, charactersUrlList: List<String>) {
         this.charactersListLiveData.value = charactersList
         isLoading.value = false
-        if (charactersList.isNullOrEmpty()) {
-            updateIsNoCharacters()
-        } else if (charactersList.size < charactersUrlList.size) {
-            updateIsNotEnoughCharactersFound()
+        if (charactersList != null) {
+            if (charactersList.size < charactersUrlList.size) {
+                updateIsNotEnoughCharactersFound()
+            }
         }
     }
 

@@ -30,7 +30,7 @@ class FragmentCharacterDetail: Fragment(R.layout.fragment_character_detail) {
     private lateinit var navigator: Navigator
     private var episodesList = ArrayList<EpisodeInfo>()
     private val adapterEpisode = AdapterEpisode {
-            episode -> val fragmentEpisodeDetail = FragmentEpisodeDetail.newInstance(episode)
+            episode -> val fragmentEpisodeDetail = FragmentEpisodeDetail.newInstance(episode.id)
         navigator.navigate(fragmentEpisodeDetail) }
 
     @Inject

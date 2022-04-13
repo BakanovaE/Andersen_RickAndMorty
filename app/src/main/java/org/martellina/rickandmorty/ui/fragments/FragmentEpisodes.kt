@@ -26,7 +26,7 @@ class FragmentEpisodes: Fragment() {
 
     private lateinit var binding: FragmentEpisodesBinding
     private var adapterEpisodes = AdapterEpisodes {
-            episode -> val fragmentEpisodeDetail = FragmentEpisodeDetail.newInstance(episode)
+            episode -> val fragmentEpisodeDetail = FragmentEpisodeDetail.newInstance(episode.id)
         navigator.navigate(fragmentEpisodeDetail)
     }
     private var episodesList = ArrayList<EpisodeInfo>()

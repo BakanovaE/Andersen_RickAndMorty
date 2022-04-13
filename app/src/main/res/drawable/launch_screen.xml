@@ -6,7 +6,7 @@
     <item>
 
         <bitmap
-            android:src="@drawable/icon"
+            android:src="@drawable/icon_splash_screen"
             android:gravity="center_horizontal" />
 
     </item>

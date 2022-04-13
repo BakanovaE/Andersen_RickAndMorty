@@ -31,16 +31,20 @@ class ViewModelCharacter @Inject constructor(private val repository: Repository)
     }
 
     fun getEpisodesById(episodesUrlList: List<String>) {
-        isLoading.value = true
-        viewModelScope.launch(Dispatchers.IO) {
-            val result = ArrayList<EpisodeInfo>()
-            for (episodeUrl in episodesUrlList) {
+        if (episodesUrlList.isNullOrEmpty()) {
+            updateIsNoEpisodes()
+        } else {
+            isLoading.value = true
+            viewModelScope.launch(Dispatchers.IO) {
+                val result = ArrayList<EpisodeInfo>()
+                for (episodeUrl in episodesUrlList) {
                     val id = episodeUrl.split("/").last().toInt()
                     val episode = repository.getEpisodeById(id)
                     episode?.let { result.add(it) }
-            }
-            launch(Dispatchers.Main) {
-                updateEpisodesListLiveData(result, episodesUrlList)
+                }
+                launch(Dispatchers.Main) {
+                    updateEpisodesListLiveData(result, episodesUrlList)
+                }
             }
         }
     }
@@ -48,10 +52,10 @@ class ViewModelCharacter @Inject constructor(private val repository: Repository)
     private fun updateEpisodesListLiveData(episodesList: List<EpisodeInfo>?, episodesUrlList: List<String>) {
         this.episodesListLiveData.value = episodesList
         isLoading.value = false
-        if (episodesList.isNullOrEmpty()) {
-            updateIsNoEpisodes()
-        } else if (episodesList.size < episodesUrlList.size) {
-            updateIsNotEnoughEpisodesFound()
+        if (episodesList != null) {
+            if (episodesList.size < episodesUrlList.size) {
+                updateIsNotEnoughEpisodesFound()
+            }
         }
     }
 
