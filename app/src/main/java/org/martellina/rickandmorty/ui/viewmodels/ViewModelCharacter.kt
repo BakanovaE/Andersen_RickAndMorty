@@ -24,7 +24,9 @@ class ViewModelCharacter @Inject constructor(private val repository: Repository)
         viewModelScope.launch(Dispatchers.IO) {
             val result = repository.getCharacterById(id)
             launch(Dispatchers.Main) {
-                characterLiveData.postValue(result)
+                result?.let {
+                    characterLiveData.postValue(it)
+                }
                 updateCharacterLiveData(result)
             }
         }

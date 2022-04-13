@@ -23,25 +23,29 @@ class ViewModelLocation @Inject constructor(private val repository: Repository):
         viewModelScope.launch(Dispatchers.IO) {
             val result = repository.getLocationById(id)
             launch(Dispatchers.Main) {
-                location.postValue(result)
+                result?.let {location.postValue(it)}
                 updateLiveData(result)
             }
         }
     }
 
     fun getCharactersById(charactersUrlList: List<String>) {
-        isLoading.value = true
-        viewModelScope.launch(Dispatchers.IO) {
-            val result = ArrayList<CharacterInfo>()
-            for (characterUrl in charactersUrlList) {
-                if (characterUrl != "") {
-                    val singleId = characterUrl.split("/").last().toInt()
-                    val character = repository.getCharacterById(singleId)
-                    character?.let { result.add(it) }
+        if (charactersUrlList.isNullOrEmpty()) {
+            updateIsNoCharacters()
+        } else {
+            isLoading.value = true
+            viewModelScope.launch(Dispatchers.IO) {
+                val result = ArrayList<CharacterInfo>()
+                for (characterUrl in charactersUrlList) {
+                    if (characterUrl != "") {
+                        val singleId = characterUrl.split("/").last().toInt()
+                        val character = repository.getCharacterById(singleId)
+                        character?.let { result.add(it) }
+                    }
                 }
-            }
-            launch(Dispatchers.Main) {
-                updateCharactersListLiveData(result, charactersUrlList)
+                launch(Dispatchers.Main) {
+                    updateCharactersListLiveData(result, charactersUrlList)
+                }
             }
         }
     }
@@ -49,10 +53,10 @@ class ViewModelLocation @Inject constructor(private val repository: Repository):
     private fun updateCharactersListLiveData(charactersList: List<CharacterInfo>?, charactersUrlList: List<String>) {
         this.charactersListLiveData.value = charactersList
         isLoading.value = false
-        if (charactersList.isNullOrEmpty()) {
-            updateIsNoCharacters()
-        } else if (charactersList.size < charactersUrlList.size) {
-            updateIsNotEnoughCharactersFound()
+        charactersList?.let {
+            if (it.size < charactersUrlList.size) {
+                updateIsNotEnoughCharactersFound()
+            }
         }
     }
 

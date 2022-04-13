@@ -23,7 +23,9 @@ class ViewModelEpisode @Inject constructor(private val repository: Repository): 
         viewModelScope.launch(Dispatchers.IO) {
             val result = repository.getEpisodeById(id)
             launch(Dispatchers.Main) {
-                episodeLiveData.postValue(result)
+                result?.let {
+                    episodeLiveData.postValue(it)
+                }
                 updateEpisodeLiveData(result)
             }
         }
