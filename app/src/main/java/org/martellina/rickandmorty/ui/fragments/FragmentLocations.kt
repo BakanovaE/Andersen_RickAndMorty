@@ -19,7 +19,6 @@ import org.martellina.rickandmorty.databinding.FragmentLocationsBinding
 import org.martellina.rickandmorty.di.factory.ViewModelLocationsFactory
 import org.martellina.rickandmorty.network.model.LocationInfo
 import org.martellina.rickandmorty.network.model.LocationsFilter
-import org.martellina.rickandmorty.ui.Navigator
 import org.martellina.rickandmorty.ui.viewmodels.ViewModelLocations
 import javax.inject.Inject
 

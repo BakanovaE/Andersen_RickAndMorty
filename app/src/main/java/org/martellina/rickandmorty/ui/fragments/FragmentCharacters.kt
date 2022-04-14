@@ -81,7 +81,7 @@ class FragmentCharacters: Fragment(R.layout.fragment_characters) {
 
         binding.clearFilterButtonCharacters.setOnClickListener {
             clearFilter()
-            viewModelCharacters.getAllCharacters(1, CharactersFilter())
+            viewModelCharacters.getFilteredCharacters(CharactersFilter(null, null, null, null, null))
         }
     }
 
@@ -161,7 +161,7 @@ class FragmentCharacters: Fragment(R.layout.fragment_characters) {
     }
 
     private fun clearFilter() {
-        filter = CharactersFilter()
+        filter = CharactersFilter(null, null, null, null, null)
     }
 
     companion object {

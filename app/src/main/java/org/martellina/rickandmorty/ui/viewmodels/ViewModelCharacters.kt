@@ -8,7 +8,6 @@ import kotlinx.coroutines.launch
 import org.martellina.rickandmorty.data.Repository
 import org.martellina.rickandmorty.network.model.CharacterInfo
 import org.martellina.rickandmorty.network.model.CharactersFilter
-import org.martellina.rickandmorty.network.model.EpisodesFilter
 import javax.inject.Inject
 
 class ViewModelCharacters @Inject constructor(private val repository: Repository): ViewModel() {

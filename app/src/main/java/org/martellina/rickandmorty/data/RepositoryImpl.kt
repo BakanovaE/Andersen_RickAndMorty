@@ -72,7 +72,7 @@ class RepositoryImpl @Inject constructor(private val episodesApi: EpisodesApi,
                 characterDao.saveCharacters(characterMapper.mapFromNetworkToDB(character))
             }
         } catch (e: Exception) {
-            val characters = characterMapper.mapCharactersFromDBToNetwork(characterDao.getFilteredCharacters(filter.name, filter.status, filter.species, filter.type, filter.gender))
+            val characters = characterMapper.mapCharactersFromDBToNetwork(characterDao.getFilteredCharacters1(filter.name, filter.status, filter.species, filter.type, filter.gender))
             result = Characters(characters, InfoResult(1))
         }
         return result
@@ -132,7 +132,8 @@ class RepositoryImpl @Inject constructor(private val episodesApi: EpisodesApi,
         val result: Characters? = try {
             charactersApi.getFilteredCharacters(filter.name, filter.status, filter.species, filter.type, filter.gender).await()
         } catch (e: Exception) {
-            val characters = characterMapper.mapCharactersFromDBToNetwork(characterDao.getFilteredCharacters(filter.name, filter.status, filter.species, filter.type, filter.gender))
+            val ch = characterDao.getFilteredCharacters1(filter.name, filter.status, filter.species, filter.type, filter.gender)
+            val characters = characterMapper.mapCharactersFromDBToNetwork(ch)
             Characters(characters, InfoResult(1))
         }
         return result

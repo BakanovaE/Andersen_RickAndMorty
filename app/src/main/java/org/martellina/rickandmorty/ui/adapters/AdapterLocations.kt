@@ -22,7 +22,6 @@ class AdapterLocations(private val onClickListener: (location: LocationInfo) -> 
                     onClickListener(location)
                 }
             }
-
         }
     }
 

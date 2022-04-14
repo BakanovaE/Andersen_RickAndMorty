@@ -13,7 +13,6 @@ class AdapterCharacter (private val onClickListener: (character: CharacterInfo) 
     private val charactersList = ArrayList<CharacterInfo>()
 
     inner class ViewHolderCharacterInEpisode(private val binding: CharacterItemBinding) : RecyclerView.ViewHolder(binding.root) {
-
         fun bind(character: CharacterInfo) {
             with(binding) {
                 textViewCharacterName.text = character.name

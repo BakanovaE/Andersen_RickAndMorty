@@ -2,7 +2,6 @@ package org.martellina.rickandmorty.data.mappers
 
 import org.martellina.rickandmorty.data.entity.EpisodeDB
 import org.martellina.rickandmorty.network.model.EpisodeInfo
-import org.martellina.rickandmorty.network.model.Episodes
 import javax.inject.Inject
 
 class EpisodeMapper @Inject constructor() {

@@ -18,7 +18,6 @@ import org.martellina.rickandmorty.databinding.FragmentEpisodesBinding
 import org.martellina.rickandmorty.di.factory.ViewModelEpisodesFactory
 import org.martellina.rickandmorty.network.model.EpisodeInfo
 import org.martellina.rickandmorty.network.model.EpisodesFilter
-import org.martellina.rickandmorty.ui.Navigator
 import org.martellina.rickandmorty.ui.adapters.AdapterEpisodes
 import org.martellina.rickandmorty.ui.viewmodels.ViewModelEpisodes
 import javax.inject.Inject

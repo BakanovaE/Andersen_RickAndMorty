@@ -17,11 +17,9 @@ import org.martellina.rickandmorty.databinding.FragmentEpisodeDetailBinding
 import org.martellina.rickandmorty.di.factory.ViewModelEpisodeFactory
 import org.martellina.rickandmorty.network.model.CharacterInfo
 import org.martellina.rickandmorty.network.model.EpisodeInfo
-import org.martellina.rickandmorty.ui.Navigator
 import org.martellina.rickandmorty.ui.adapters.AdapterCharacter
 import org.martellina.rickandmorty.ui.viewmodels.ViewModelEpisode
 import javax.inject.Inject
-
 
 private const val KEY_EPISODE = "key.episode"
 

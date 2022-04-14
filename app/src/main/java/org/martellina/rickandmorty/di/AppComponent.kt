@@ -1,7 +1,6 @@
 package org.martellina.rickandmorty.di
 
 import dagger.Component
-import dagger.Provides
 import org.martellina.rickandmorty.data.RepositoryImpl
 import org.martellina.rickandmorty.ui.fragments.*
 import org.martellina.rickandmorty.ui.viewmodels.*

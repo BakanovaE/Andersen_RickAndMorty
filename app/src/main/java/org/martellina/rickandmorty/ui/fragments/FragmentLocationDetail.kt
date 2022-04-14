@@ -17,7 +17,6 @@ import org.martellina.rickandmorty.databinding.FragmentLocationDetailBinding
 import org.martellina.rickandmorty.di.factory.ViewModelLocationFactory
 import org.martellina.rickandmorty.network.model.CharacterInfo
 import org.martellina.rickandmorty.network.model.LocationInfo
-import org.martellina.rickandmorty.ui.Navigator
 import org.martellina.rickandmorty.ui.adapters.AdapterCharacter
 import org.martellina.rickandmorty.ui.viewmodels.ViewModelLocation
 import javax.inject.Inject
@@ -89,7 +88,6 @@ class FragmentLocationDetail: Fragment() {
             it.let {
                 binding.recyclerviewCharactersInLocation.apply { visibility = if (it) View.GONE else View.VISIBLE }
                 binding.textViewNoCharacters.apply { visibility = if (it) View.VISIBLE else View.GONE }
-
             }
         }
         viewModelLocation.isNotEnoughCharactersFound.observe(viewLifecycleOwner) {

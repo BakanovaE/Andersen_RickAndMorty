@@ -6,7 +6,6 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.martellina.rickandmorty.data.Repository
-import org.martellina.rickandmorty.network.model.CharactersFilter
 import org.martellina.rickandmorty.network.model.LocationInfo
 import org.martellina.rickandmorty.network.model.LocationsFilter
 import javax.inject.Inject

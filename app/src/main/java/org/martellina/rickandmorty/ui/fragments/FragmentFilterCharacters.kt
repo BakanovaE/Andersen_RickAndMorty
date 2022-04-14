@@ -9,8 +9,6 @@ import androidx.fragment.app.DialogFragment
 import org.martellina.rickandmorty.R
 import org.martellina.rickandmorty.databinding.FragmentFilterCharactersBinding
 import org.martellina.rickandmorty.network.model.CharactersFilter
-import org.martellina.rickandmorty.network.model.EpisodesFilter
-import org.martellina.rickandmorty.network.model.LocationsFilter
 
 class FragmentFilterCharacters: DialogFragment() {
 
@@ -33,7 +31,7 @@ class FragmentFilterCharacters: DialogFragment() {
                 } else ""
                 val status = if (binding.spinnerStatusFilterCharacters.selectedItem != "Any") {
                     binding.spinnerStatusFilterCharacters.selectedItem.toString()
-                } else ""
+                } else null
                 val species = if (binding.editTextSpeciesFilterCharacters.text.isNotEmpty()) {
                     binding.editTextSpeciesFilterCharacters.text.toString()
                 } else ""
@@ -42,7 +40,7 @@ class FragmentFilterCharacters: DialogFragment() {
                 } else ""
                 val gender = if (binding.spinnerGenderFilterCharacters.selectedItem != "Any") {
                     binding.spinnerGenderFilterCharacters.selectedItem as String
-                } else ""
+                } else null
                 val filter = CharactersFilter(name, status, species, type, gender)
                 if (isEmpty(filter)) {
                     Toast.makeText(requireContext(), R.string.toast_empty_filter, Toast.LENGTH_SHORT).show()
@@ -54,7 +52,7 @@ class FragmentFilterCharacters: DialogFragment() {
             }
             .setNegativeButton("Cancel", null)
             .setNeutralButton("Clear filter and exit") {_, _ ->
-                (parentFragment as FragmentCharacters).getFilteredCharacters(CharactersFilter("", "", "", "", ""))
+                (parentFragment as FragmentCharacters).getFilteredCharacters(CharactersFilter("", null, "", "", null))
             }
             .create()
         return dialog
@@ -86,10 +84,10 @@ class FragmentFilterCharacters: DialogFragment() {
 
     private fun isEmpty(filter: CharactersFilter): Boolean {
         return filter.name == ""
-                && filter.status == ""
+                && filter.status == null
                 && filter.species == ""
                 && filter.type == ""
-                && filter.gender == ""
+                && filter.gender == null
     }
 
     private fun isSame(args: CharactersFilter?, filter: CharactersFilter): Boolean {

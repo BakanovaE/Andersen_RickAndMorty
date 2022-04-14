@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="info_text_view">16sp</dimen>
-    <dimen name="names_text_view">20sp</dimen>
+    <dimen name="info_text_view">16dp</dimen>
+    <dimen name="names_text_view">20dp</dimen>
     <dimen name="margin_elements">2dp</dimen>
+    <dimen name="margin">8dp</dimen>
+    <dimen name="margin_text">1dp</dimen>
 </resources>

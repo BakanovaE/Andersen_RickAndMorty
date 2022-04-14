@@ -6,7 +6,6 @@ import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import org.martellina.rickandmorty.BuildConfig
 import org.martellina.rickandmorty.network.api.CharactersApi
 import org.martellina.rickandmorty.network.api.EpisodesApi
 import org.martellina.rickandmorty.network.api.LocationsApi

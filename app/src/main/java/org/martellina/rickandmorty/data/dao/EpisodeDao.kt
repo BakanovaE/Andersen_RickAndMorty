@@ -1,10 +1,8 @@
 package org.martellina.rickandmorty.data.dao
 
-import android.view.inspector.PropertyMapper
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
-import androidx.room.OnConflictStrategy.REPLACE
 import androidx.room.Query
 import org.martellina.rickandmorty.data.entity.EpisodeDB
 

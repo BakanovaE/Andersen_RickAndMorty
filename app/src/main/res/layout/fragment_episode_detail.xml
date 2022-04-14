@@ -3,7 +3,6 @@
     android:id="@+id/swipe_refresh_layout_episode"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -20,7 +19,7 @@
             android:id="@+id/text_view_episode_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/margin"
             android:textSize="@dimen/names_text_view"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -48,7 +47,7 @@
             android:id="@+id/recyclerview_characters_in_episode"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="@dimen/margin"
             app:layout_constraintBottom_toTopOf="@+id/buttonBack"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -62,8 +61,8 @@
             app:tint="@color/colorPrimaryVariant"
             android:layout_width="70dp"
             android:layout_height="40dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="@dimen/margin"
+            android:layout_marginBottom="@dimen/margin"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -80,7 +79,7 @@
             android:id="@+id/textView_no_characters"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="@dimen/margin"
             android:text="@string/no_characters_in_episode"
             android:textSize="@dimen/info_text_view"
             app:layout_constraintEnd_toEndOf="parent"
