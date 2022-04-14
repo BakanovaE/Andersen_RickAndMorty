@@ -67,6 +67,10 @@ class FragmentLocationDetail: Fragment() {
         observeLiveData()
         initializeRecyclerView()
         initializeSwipeRefreshLayout()
+
+        binding.buttonBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
     private fun observeLiveData() {
@@ -90,7 +94,12 @@ class FragmentLocationDetail: Fragment() {
         }
         viewModelLocation.isNotEnoughCharactersFound.observe(viewLifecycleOwner) {
             it.let {
-                if (it)Toast.makeText(requireContext(),R.string.toast_more_characters,Toast.LENGTH_SHORT).show()
+                if (it) Toast.makeText(requireContext(),R.string.toast_more_characters,Toast.LENGTH_SHORT).show()
+            }
+        }
+        viewModelLocation.isNoDataFound.observe(viewLifecycleOwner) {
+            it.let{
+                if (it) Toast.makeText(requireContext(),R.string.no_data_toast,Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -102,9 +111,6 @@ class FragmentLocationDetail: Fragment() {
                 if (location?.type?.isEmpty() == true) "unknown" else location?.type
             textViewLocationDimension.text =
                 if (location?.dimension?.isEmpty() == true) "unknown" else location?.dimension
-            buttonBack.setOnClickListener {
-                findNavController().popBackStack()
-            }
         }
             if (charactersList.isNullOrEmpty()) {
                 getCharactersList(location)

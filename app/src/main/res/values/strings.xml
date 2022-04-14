@@ -55,7 +55,9 @@
     <string name="no_characters_in_episode">There is no characters in this episode</string>
     <string name="no_episodes_in_character">There is no episodes with this character</string>
 
-    <string name="toast_more_episodes_in_character">Connect to network to receive all episodes</string>
-    <string name="toast_more_characters">Connect to network to receive all characters</string>
+    <string name="toast_more_episodes_in_character">Connect to network to receive episodes</string>
+    <string name="toast_more_characters">Connect to network to receive characters</string>
+
+    <string name="no_data_toast">Connect to network to receive data</string>
 
 </resources>

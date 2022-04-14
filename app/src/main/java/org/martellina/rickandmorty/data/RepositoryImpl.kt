@@ -80,9 +80,7 @@ class RepositoryImpl @Inject constructor(private val episodesApi: EpisodesApi,
             result = episodesApi.getEpisodeById(id).await()
         } catch (e: Exception) {
             val episode = episodeDao.getEpisodeById(id)
-            if(episode !=null) {
-                result = episodeMapper.mapFromDBToNetwork(episode)
-            }
+            episode?.let {episodeMapper.mapFromDBToNetwork(it)}
         }
         return result
     }
@@ -91,7 +89,8 @@ class RepositoryImpl @Inject constructor(private val episodesApi: EpisodesApi,
         val result: LocationInfo? = try {
             locationsApi.getLocationById(id).await()
         } catch (e: Exception) {
-            locationMapper.mupFromDBToNetwork(locationDao.getLocationById(id))
+            val location = locationDao.getLocationById(id)
+            location?.let {locationMapper.mupFromDBToNetwork(it)}
         }
         return result
     }

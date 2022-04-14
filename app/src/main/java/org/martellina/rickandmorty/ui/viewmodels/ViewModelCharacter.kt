@@ -17,17 +17,15 @@ class ViewModelCharacter @Inject constructor(private val repository: Repository)
     var isLoading = MutableLiveData<Boolean>()
     var isNoEpisodes = MutableLiveData<Boolean>()
     var isNotEnoughEpisodesFound = MutableLiveData<Boolean>()
-
+    var isNoDataFound = MutableLiveData<Boolean>()
 
     fun getCharacterById(id: Int) {
         isLoading.value = true
         viewModelScope.launch(Dispatchers.IO) {
             val result = repository.getCharacterById(id)
             launch(Dispatchers.Main) {
-                result?.let {
-                    characterLiveData.postValue(it)
-                }
-                updateCharacterLiveData(result)
+                result?.let {characterLiveData.postValue(it)} ?: run{isNoDataFound.value = true}
+                isLoading.value = false
             }
         }
     }
@@ -60,12 +58,6 @@ class ViewModelCharacter @Inject constructor(private val repository: Repository)
             }
         }
     }
-
-    private fun updateCharacterLiveData(character: CharacterInfo?) {
-        this.characterLiveData.value = character
-        isLoading.value = false
-    }
-
 
     private fun updateIsNoEpisodes() {
         isNoEpisodes.value = true

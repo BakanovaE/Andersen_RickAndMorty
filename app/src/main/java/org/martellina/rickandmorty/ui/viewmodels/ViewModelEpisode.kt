@@ -17,16 +17,15 @@ class ViewModelEpisode @Inject constructor(private val repository: Repository): 
     var isLoading = MutableLiveData<Boolean>()
     var isNoCharacters = MutableLiveData<Boolean>()
     var isNotEnoughCharactersFound = MutableLiveData<Boolean>()
+    var isNoDataFound = MutableLiveData<Boolean>()
 
     fun getEpisodeById(id: Int) {
         isLoading.value = true
         viewModelScope.launch(Dispatchers.IO) {
             val result = repository.getEpisodeById(id)
             launch(Dispatchers.Main) {
-                result?.let {
-                    episodeLiveData.postValue(it)
-                }
-                updateEpisodeLiveData(result)
+                result?.let {episodeLiveData.postValue(it)}  ?: run {isNoDataFound.value = true}
+                isLoading.value = false
             }
         }
     }

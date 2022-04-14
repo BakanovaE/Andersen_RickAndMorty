@@ -68,6 +68,10 @@ class FragmentEpisodeDetail: Fragment() {
         observeLiveData()
         initializeRecyclerView()
         initializeSwipeRefreshLayout()
+
+        binding.buttonBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
     private fun observeLiveData() {
@@ -86,12 +90,16 @@ class FragmentEpisodeDetail: Fragment() {
             it.let {
                 binding.recyclerviewCharactersInEpisode.apply { visibility = if (it) View.GONE else View.VISIBLE }
                 binding.textViewNoCharacters.apply { visibility = if (it) View.VISIBLE else View.GONE }
-
             }
         }
         viewModelEpisode.isNotEnoughCharactersFound.observe(viewLifecycleOwner) {
             it.let {
                 if (it) Toast.makeText(requireContext(), R.string.toast_more_characters, Toast.LENGTH_SHORT).show()
+            }
+        }
+        viewModelEpisode.isNoDataFound.observe(viewLifecycleOwner) {
+            it.let{
+                if (it) Toast.makeText(requireContext(),R.string.no_data_toast,Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -101,9 +109,6 @@ class FragmentEpisodeDetail: Fragment() {
             textViewEpisodeName.text = episode?.name
             textViewEpisodeNumber.text = episode?.episode
             textViewEpisodeAirDate.text = episode?.air_date
-            buttonBack.setOnClickListener {
-                findNavController().popBackStack()
-            }
         }
         if (charactersList.isNullOrEmpty()) {
             getCharactersList(episode)

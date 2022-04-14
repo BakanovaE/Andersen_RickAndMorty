@@ -68,6 +68,9 @@ class FragmentCharacterDetail: Fragment(R.layout.fragment_character_detail) {
         observeLiveData()
         initializeRecyclerView()
         initializeSwipeRefreshLayout()
+        binding.buttonBack.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 
     private fun observeLiveData() {
@@ -94,6 +97,11 @@ class FragmentCharacterDetail: Fragment(R.layout.fragment_character_detail) {
                 if (it) Toast.makeText(requireContext(), R.string.toast_more_episodes_in_character, Toast.LENGTH_SHORT).show()
             }
         }
+        viewModelCharacter.isNoDataFound.observe(viewLifecycleOwner) {
+            it.let{
+                if (it) Toast.makeText(requireContext(),R.string.no_data_toast,Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun updateUI(character: CharacterInfo?) {
@@ -106,14 +114,10 @@ class FragmentCharacterDetail: Fragment(R.layout.fragment_character_detail) {
             textViewCharacterOrigin.text = character?.origin?.name
             textViewCharacterLocation.text = character?.location?.name
             Picasso.get().load(character?.image).into(imageViewCharacter)
-            buttonBack.setOnClickListener {
-                findNavController().popBackStack()
-            }
             textViewCharacterOrigin.setOnClickListener {
                 if (character != null) {
                     if (character.origin.url.isNotEmpty()) {
-                        val action =
-                            FragmentCharacterDetailDirections.actionFragmentCharacterDetailToFragmentLocationDetail(
+                        val action = FragmentCharacterDetailDirections.actionFragmentCharacterDetailToFragmentLocationDetail(
                                 character.origin.url.split("/").last().trim().toInt()
                             )
                         findNavController().navigate(action)
@@ -125,8 +129,7 @@ class FragmentCharacterDetail: Fragment(R.layout.fragment_character_detail) {
             textViewCharacterLocation.setOnClickListener {
                 if (character != null) {
                     if (character.location.url.isNotEmpty()) {
-                        val action =
-                            FragmentCharacterDetailDirections.actionFragmentCharacterDetailToFragmentLocationDetail(
+                        val action = FragmentCharacterDetailDirections.actionFragmentCharacterDetailToFragmentLocationDetail(
                                 character.location.url.split("/").last().trim().toInt()
                             )
                         findNavController().navigate(action)

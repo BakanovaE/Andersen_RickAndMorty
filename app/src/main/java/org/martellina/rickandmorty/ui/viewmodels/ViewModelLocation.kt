@@ -17,14 +17,15 @@ class ViewModelLocation @Inject constructor(private val repository: Repository):
     var isLoading = MutableLiveData<Boolean>()
     var isNoCharacters = MutableLiveData<Boolean>()
     var isNotEnoughCharactersFound = MutableLiveData<Boolean>()
+    var isNoDataFound = MutableLiveData<Boolean>()
 
     fun getLocationById(id: Int) {
         isLoading.value = true
         viewModelScope.launch(Dispatchers.IO) {
             val result = repository.getLocationById(id)
             launch(Dispatchers.Main) {
-                result?.let {location.postValue(it)}
-                updateLiveData(result)
+                result?.let {location.postValue(it)} ?: run {isNoDataFound.value = true}
+                isLoading.value = false
             }
         }
     }
@@ -60,11 +61,6 @@ class ViewModelLocation @Inject constructor(private val repository: Repository):
         }
     }
 
-    private fun updateLiveData(episode: LocationInfo?) {
-        this.location.value = episode
-        isLoading.value = false
-    }
-
     private fun updateIsNoCharacters() {
         isNoCharacters.value = true
     }
@@ -72,5 +68,4 @@ class ViewModelLocation @Inject constructor(private val repository: Repository):
     private fun updateIsNotEnoughCharactersFound() {
         isNotEnoughCharactersFound.value = true
     }
-
 }
