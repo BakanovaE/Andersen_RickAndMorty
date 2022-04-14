@@ -52,10 +52,14 @@ class RepositoryImpl @Inject constructor(private val episodesApi: EpisodesApi,
     }
 
     override suspend fun getCharacterById(id: Int): CharacterInfo? {
-        val result: CharacterInfo? = try {
-            charactersApi.getCharacterById(id).await()
+        var result: CharacterInfo? = null
+        try {
+            result = charactersApi.getCharacterById(id).await()
         } catch (e :Exception) {
-            characterMapper.mapFromDBToNetwork(characterDao.getCharacterById(id))
+            val character = characterDao.getCharacterById(id)
+            if (character != null) {
+                result = characterMapper.mapFromDBToNetwork(characterDao.getCharacterById(id))
+            }
         }
         return result
     }
@@ -80,17 +84,22 @@ class RepositoryImpl @Inject constructor(private val episodesApi: EpisodesApi,
             result = episodesApi.getEpisodeById(id).await()
         } catch (e: Exception) {
             val episode = episodeDao.getEpisodeById(id)
-            episode?.let {episodeMapper.mapFromDBToNetwork(it)}
+            if (episode != null) {
+            result = episodeMapper.mapFromDBToNetwork(episode)
+            }
         }
         return result
     }
 
     override suspend fun getLocationById(id: Int): LocationInfo? {
-        val result: LocationInfo? = try {
-            locationsApi.getLocationById(id).await()
+        var result: LocationInfo? = null
+        try {
+            result = locationsApi.getLocationById(id).await()
         } catch (e: Exception) {
             val location = locationDao.getLocationById(id)
-            location?.let {locationMapper.mupFromDBToNetwork(it)}
+            if (location != null) {
+                result = locationMapper.mupFromDBToNetwork(location)
+            }
         }
         return result
     }
