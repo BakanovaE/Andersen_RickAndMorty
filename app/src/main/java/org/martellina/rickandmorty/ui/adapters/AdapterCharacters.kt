@@ -2,6 +2,7 @@ package org.martellina.rickandmorty.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import org.martellina.rickandmorty.databinding.CharacterItemBinding
@@ -47,6 +48,16 @@ class AdapterCharacters(private val onClickListener: (character: CharacterInfo) 
         this.charactersList.clear()
         this.charactersList.addAll(charactersList)
         notifyDataSetChanged()
+    }
+
+    class CharactersDiffCallback : DiffUtil.ItemCallback<CharacterInfo>() {
+        override fun areItemsTheSame(oldItem: CharacterInfo, newItem: CharacterInfo): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: CharacterInfo, newItem: CharacterInfo): Boolean {
+            return oldItem == newItem
+        }
     }
 
 }

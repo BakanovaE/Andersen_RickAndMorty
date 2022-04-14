@@ -68,6 +68,7 @@ class FragmentCharacterDetail: Fragment(R.layout.fragment_character_detail) {
         observeLiveData()
         initializeRecyclerView()
         initializeSwipeRefreshLayout()
+
         binding.buttonBack.setOnClickListener {
             findNavController().popBackStack()
         }
@@ -89,7 +90,6 @@ class FragmentCharacterDetail: Fragment(R.layout.fragment_character_detail) {
             it.let {
                 binding.recyclerviewEpisodesInCharacter.apply { visibility = if (it) View.GONE else View.VISIBLE }
                 binding.textViewNoCharacters.apply { visibility = if (it) View.VISIBLE else View.GONE }
-
             }
         }
         viewModelCharacter.isNotEnoughEpisodesFound.observe(viewLifecycleOwner) {

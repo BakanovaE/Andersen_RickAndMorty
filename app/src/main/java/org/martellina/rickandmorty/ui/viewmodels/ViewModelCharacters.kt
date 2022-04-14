@@ -8,6 +8,7 @@ import kotlinx.coroutines.launch
 import org.martellina.rickandmorty.data.Repository
 import org.martellina.rickandmorty.network.model.CharacterInfo
 import org.martellina.rickandmorty.network.model.CharactersFilter
+import org.martellina.rickandmorty.network.model.EpisodesFilter
 import javax.inject.Inject
 
 class ViewModelCharacters @Inject constructor(private val repository: Repository): ViewModel() {
@@ -37,6 +38,23 @@ class ViewModelCharacters @Inject constructor(private val repository: Repository
                 result?.let {
                     setFilteredList(it.results)
                     if(it.results.isEmpty()) {
+                        isEmptyFilteredResult.value = true
+                    }
+                    isEmptyFilteredResult.value = false
+                }
+                updatePages(result?.info?.pages)
+            }
+        }
+    }
+
+    fun reloadCharacters(page: Int, filter: CharactersFilter) {
+        isLoading.value = true
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = repository.getAllCharacters(page, filter)
+            launch(Dispatchers.Main) {
+                result?.let {
+                    setFilteredList(it.results)
+                    if (it.results.isEmpty()) {
                         isEmptyFilteredResult.value = true
                     }
                     isEmptyFilteredResult.value = false

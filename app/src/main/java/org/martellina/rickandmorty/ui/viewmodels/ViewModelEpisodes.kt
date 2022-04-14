@@ -47,6 +47,23 @@ class ViewModelEpisodes @Inject constructor(private val repository: Repository):
         }
     }
 
+    fun reloadEpisodes(page: Int, filter: EpisodesFilter) {
+        isLoading.value = true
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = repository.getAllEpisodes(page, filter)
+            launch(Dispatchers.Main) {
+                result?.let {
+                    setFilteredList(it.results)
+                    if (it.results.isEmpty()) {
+                        isEmptyFilteredResult.value = true
+                    }
+                    isEmptyFilteredResult.value = false
+                }
+                updatePages(result?.info?.pages)
+            }
+        }
+    }
+
     private fun updateEpisodesList(list: List<EpisodeInfo>?) {
             if (episodesList.value.isNullOrEmpty()) {
                 if (list.isNullOrEmpty()) {

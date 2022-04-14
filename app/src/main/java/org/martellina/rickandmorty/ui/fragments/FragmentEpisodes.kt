@@ -93,7 +93,7 @@ class FragmentEpisodes: Fragment() {
 
     private fun initializeSwipeRefreshLayout() {
         binding.swipeRefreshLayoutEpisodes.setOnRefreshListener {
-            viewModelEpisodes.getAllEpisodes(page, filter)
+            viewModelEpisodes.reloadEpisodes(1, filter)
             binding.swipeRefreshLayoutEpisodes.isRefreshing = false
         }
     }

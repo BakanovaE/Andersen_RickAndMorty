@@ -31,21 +31,21 @@
             android:name="character"
             app:argType="org.martellina.rickandmorty.network.model.CharacterInfo" />
         <action
-            android:id="@+id/action_fragmentCharacterDetail_to_fragmentEpisodeDetail"
-            app:destination="@id/fragmentEpisodeDetail" />
-        <action
             android:id="@+id/action_fragmentCharacterDetail_to_fragmentLocationDetail"
             app:destination="@id/fragmentLocationDetail" />
+        <action
+            android:id="@+id/action_fragmentCharacterDetail_to_fragmentEpisodeDetail"
+            app:destination="@id/fragmentEpisodeDetail" />
     </fragment>
     <fragment
         android:id="@+id/fragmentLocationDetail"
         android:name="org.martellina.rickandmorty.ui.fragments.FragmentLocationDetail"
         android:label="FragmentLocationDetail" >
-        <action
-            android:id="@+id/action_fragmentLocationDetail_to_fragmentCharacterDetail"
-            app:destination="@id/fragmentCharacterDetail" />
         <argument
             android:name="locationId"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_fragmentLocationDetail_to_fragmentCharacterDetail"
+            app:destination="@id/fragmentCharacterDetail" />
     </fragment>
 </navigation>

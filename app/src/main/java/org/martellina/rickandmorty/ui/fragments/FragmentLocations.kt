@@ -109,7 +109,7 @@ class FragmentLocations: Fragment() {
 
     private fun initializeSwipeRefreshLayout() {
         binding.swipeRefreshLayoutLocations.setOnRefreshListener {
-            viewModelLocations.getAllLocations(page, filter)
+            viewModelLocations.reloadLocations(page, filter)
             binding.swipeRefreshLayoutLocations.isRefreshing = false
         }
     }

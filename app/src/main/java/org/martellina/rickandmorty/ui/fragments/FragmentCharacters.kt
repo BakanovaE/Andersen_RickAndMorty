@@ -76,7 +76,7 @@ class FragmentCharacters: Fragment(R.layout.fragment_characters) {
         }
 
         binding.swipeRefreshLayoutCharacters.setOnRefreshListener {
-            viewModelCharacters.getAllCharacters(page, filter)
+            viewModelCharacters.reloadCharacters(page, filter)
             binding.swipeRefreshLayoutCharacters.isRefreshing = false
         }
 
@@ -161,7 +161,7 @@ class FragmentCharacters: Fragment(R.layout.fragment_characters) {
         setBackground(orientation)
     }
 
-    fun clearFilter() {
+    private fun clearFilter() {
         filter = CharactersFilter()
     }
 

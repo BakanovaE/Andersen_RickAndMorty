@@ -134,7 +134,6 @@ class FragmentEpisodeDetail: Fragment() {
         }
     }
 
-
     private fun initializeSwipeRefreshLayout() {
         binding.swipeRefreshLayoutEpisode.setOnRefreshListener {
             viewModelEpisode.getEpisodeById(episodeId)

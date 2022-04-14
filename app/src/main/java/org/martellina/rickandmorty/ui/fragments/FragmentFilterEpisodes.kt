@@ -19,7 +19,7 @@ class FragmentFilterEpisodes: DialogFragment() {
 
         binding = FragmentFilterEpisodesBinding.inflate(LayoutInflater.from(requireContext()))
 
-        val args = arguments?.getParcelable<EpisodesFilter>(FFE)
+        val args = arguments?.getParcelable<EpisodesFilter>(FRAGMENT_FILTER_EPISODES)
         if (args != null) {
             binding.editTextNameFilterEpisodes.setText(args.name)
             binding.editTextCodeFilterEpisodes.setText(args.code)
@@ -62,11 +62,11 @@ class FragmentFilterEpisodes: DialogFragment() {
     }
 
     companion object {
-    private const val FFE = "FFE"
+    private const val FRAGMENT_FILTER_EPISODES = "FRAGMENT_FILTER_EPISODES"
         fun newInstance(filter: EpisodesFilter): FragmentFilterEpisodes {
             val fragment = FragmentFilterEpisodes()
             val args = Bundle().apply {
-                putParcelable(FFE, filter)
+                putParcelable(FRAGMENT_FILTER_EPISODES, filter)
             }
             fragment.arguments = args
             return fragment

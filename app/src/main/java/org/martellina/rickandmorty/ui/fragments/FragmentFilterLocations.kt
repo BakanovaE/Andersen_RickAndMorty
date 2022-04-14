@@ -8,7 +8,6 @@ import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import org.martellina.rickandmorty.R
 import org.martellina.rickandmorty.databinding.FragmentFilterLocationsBinding
-import org.martellina.rickandmorty.network.model.EpisodesFilter
 import org.martellina.rickandmorty.network.model.LocationsFilter
 
 class FragmentFilterLocations: DialogFragment() {
@@ -18,7 +17,7 @@ class FragmentFilterLocations: DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         binding = FragmentFilterLocationsBinding.inflate(LayoutInflater.from(requireContext()))
 
-        val args = arguments?.getParcelable<LocationsFilter>(FFL)
+        val args = arguments?.getParcelable<LocationsFilter>(FRAGMENT_FILTER_LOCATIONS)
         if (args != null) {
             binding.editTextNameFilterLocations.setText(args.name)
             binding.editTextTypeFilterLocations.setText(args.type)
@@ -67,11 +66,11 @@ class FragmentFilterLocations: DialogFragment() {
     }
 
     companion object {
-        private const val FFL ="FFL"
+        private const val FRAGMENT_FILTER_LOCATIONS ="FRAGMENT_FILTER_LOCATIONS"
         fun newInstance(filter: LocationsFilter): FragmentFilterLocations{
             val fragment = FragmentFilterLocations()
             val args = Bundle().apply {
-                putParcelable(FFL, filter)
+                putParcelable(FRAGMENT_FILTER_LOCATIONS, filter)
             }
             fragment.arguments = args
             return fragment
