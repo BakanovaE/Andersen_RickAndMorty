@@ -133,11 +133,14 @@ class FragmentLocations: Fragment() {
         }
 
         viewModelLocations.isEmptyFilteredResult.observe(viewLifecycleOwner) {
-            Toast.makeText(requireContext(), R.string.toast_filter_locations, Toast.LENGTH_SHORT).show()
+            it.let {
+                if (it) Toast.makeText(requireContext(), R.string.toast_filter_locations, Toast.LENGTH_SHORT).show()
+            }
         }
-
         viewModelLocations.isEmpty.observe(viewLifecycleOwner) {
-            Toast.makeText(requireContext(), R.string.toast_empty_list, Toast.LENGTH_SHORT).show()
+            it.let {
+                if (it) Toast.makeText(requireContext(), R.string.toast_empty_list, Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

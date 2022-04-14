@@ -20,6 +20,7 @@ class AdapterCharacters(private val onClickListener: (character: CharacterInfo) 
                 textViewCharacterGender.text = character.gender
                 textViewCharacterStatus.text = character.status
                 textViewCharacterSpecies.text = character.species
+                textViewCharacterSpecies.isSelected = true
                 root.setOnClickListener {
                     onClickListener(character)
                 }

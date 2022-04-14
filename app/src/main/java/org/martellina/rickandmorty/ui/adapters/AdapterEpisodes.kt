@@ -16,7 +16,6 @@ class AdapterEpisodes(private val onClickListener: (episode: EpisodeInfo) -> Uni
         fun bind(episode: EpisodeInfo){
             with(binding){
                 textViewEpisodeName.text = episode.name
-                textViewEpisodeName.isSelected = true
                 textViewEpisodeNumber.text = episode.episode
                 textViewEpisodeAirDate.text = episode.air_date
                 root.setOnClickListener {

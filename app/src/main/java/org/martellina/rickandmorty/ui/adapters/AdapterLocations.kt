@@ -16,7 +16,6 @@ class AdapterLocations(private val onClickListener: (location: LocationInfo) -> 
         fun bind(location: LocationInfo) {
             with(binding) {
                 textViewLocationName.text = location.name
-                textViewLocationName.isSelected = true
                 textViewLocationType.text = location.type.ifEmpty { "unknown" }
                 textViewLocationDimension.text = location.dimension.ifEmpty { "unknown" }
                 root.setOnClickListener {

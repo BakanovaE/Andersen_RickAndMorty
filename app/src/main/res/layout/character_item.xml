@@ -39,7 +39,11 @@
             android:textSize="@dimen/info_text_view"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/image_view_character"
-            app:layout_constraintTop_toBottomOf="@id/text_view_character_name" />
+            app:layout_constraintTop_toBottomOf="@id/text_view_character_name"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:scrollHorizontally="true" />
 
         <TextView
             android:id="@+id/text_view_character_status"

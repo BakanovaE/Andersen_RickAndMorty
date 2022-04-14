@@ -119,23 +119,23 @@ class FragmentEpisodes: Fragment() {
                 adapterEpisodes.updateList(episodesList)
             }
         }
-
         viewModelEpisodes.isLoading.observe(viewLifecycleOwner) {
             it.let {
                 binding.progressBar.apply { visibility = if (it) View.VISIBLE else View.GONE }
             }
         }
-
         viewModelEpisodes.pages.observe(viewLifecycleOwner) {
             this.pages = it
         }
-
         viewModelEpisodes.isEmptyFilteredResult.observe(viewLifecycleOwner) {
-            Toast.makeText(requireContext(), R.string.toast_filter_episodes, Toast.LENGTH_SHORT).show()
+            it.let {
+                if (it) Toast.makeText(requireContext(), R.string.toast_filter_episodes, Toast.LENGTH_SHORT).show()
+            }
         }
-
         viewModelEpisodes.isEmpty.observe(viewLifecycleOwner) {
-            Toast.makeText(requireContext(), R.string.toast_empty_list, Toast.LENGTH_SHORT).show()
+            it.let {
+                if (it) Toast.makeText(requireContext(), R.string.toast_empty_list, Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

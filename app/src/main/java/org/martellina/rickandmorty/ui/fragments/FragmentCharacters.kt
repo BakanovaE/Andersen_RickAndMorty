@@ -81,8 +81,8 @@ class FragmentCharacters: Fragment(R.layout.fragment_characters) {
         }
 
         binding.clearFilterButtonCharacters.setOnClickListener {
-            filter = CharactersFilter(null, null, null, null, null)
-            viewModelCharacters.getFilteredCharacters(filter)
+            clearFilter()
+            viewModelCharacters.getAllCharacters(1, CharactersFilter())
         }
     }
 
@@ -102,10 +102,17 @@ class FragmentCharacters: Fragment(R.layout.fragment_characters) {
             this.pages = it
         }
         viewModelCharacters.isEmptyFilteredResult.observe(viewLifecycleOwner) {
+            it.let {
+                if (it)
             Toast.makeText(requireContext(), R.string.toast_filter_characters, Toast.LENGTH_SHORT).show()
+            }
         }
         viewModelCharacters.isEmpty.observe(viewLifecycleOwner) {
-            Toast.makeText(requireContext(), R.string.toast_empty_list, Toast.LENGTH_SHORT).show()
+            it.let {
+                if (it)
+                    Toast.makeText(requireContext(), R.string.toast_empty_list, Toast.LENGTH_SHORT)
+                        .show()
+            }
         }
     }
 
@@ -152,6 +159,10 @@ class FragmentCharacters: Fragment(R.layout.fragment_characters) {
     override fun onResume() {
         super.onResume()
         setBackground(orientation)
+    }
+
+    fun clearFilter() {
+        filter = CharactersFilter()
     }
 
     companion object {

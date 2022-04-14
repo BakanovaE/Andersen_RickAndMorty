@@ -34,11 +34,12 @@ class ViewModelCharacters @Inject constructor(private val repository: Repository
         viewModelScope.launch(Dispatchers.IO) {
             val result = repository.getFilteredCharacters(filter)
             launch(Dispatchers.Main) {
-                setFilteredList(result?.results)
-                if (result != null) {
-                    if(result.results.isEmpty()) {
+                result?.let {
+                    setFilteredList(it.results)
+                    if(it.results.isEmpty()) {
                         isEmptyFilteredResult.value = true
                     }
+                    isEmptyFilteredResult.value = false
                 }
                 updatePages(result?.info?.pages)
             }
@@ -59,6 +60,7 @@ class ViewModelCharacters @Inject constructor(private val repository: Repository
                     }
                 }
             }
+        isEmpty.value = false
         isLoading.value = false
     }
 

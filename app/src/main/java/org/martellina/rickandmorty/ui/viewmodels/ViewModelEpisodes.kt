@@ -35,12 +35,14 @@ class ViewModelEpisodes @Inject constructor(private val repository: Repository):
         viewModelScope.launch(Dispatchers.IO) {
             val result = repository.getFilteredEpisodes(filter)
             launch(Dispatchers.Main) {
-                setFilteredList(result?.results)
-                if (result != null) {
-                    if (result.results.isEmpty())
+                result?.let {
+                    setFilteredList(it.results)
+                    if (it.results.isEmpty()) {
                         isEmptyFilteredResult.value = true
+                    }
+                    isEmptyFilteredResult.value = false
                 }
-                updatePages(result?.info?.pages)
+                    updatePages(result?.info?.pages)
             }
         }
     }
@@ -60,6 +62,7 @@ class ViewModelEpisodes @Inject constructor(private val repository: Repository):
                 }
             }
         isLoading.value = false
+        isEmpty.value = false
     }
 
     private fun setFilteredList(list: List<EpisodeInfo>?) {
