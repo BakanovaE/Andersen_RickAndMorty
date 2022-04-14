@@ -3,8 +3,83 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_nav_graph"
-    app:startDestination="@id/character_nav_graph">
-    <include app:graph="@navigation/character_nav_graph" />
-    <include app:graph="@navigation/episode_nav_graph" />
-    <include app:graph="@navigation/location_nav_graph" />
+    app:startDestination="@id/fragmentCharacters">
+    <fragment
+        android:id="@+id/fragmentCharacters"
+        android:name="org.martellina.rickandmorty.ui.fragments.FragmentCharacters"
+        android:label="FragmentCharacters" >
+        <action
+            android:id="@+id/action_fragmentCharacters_to_fragmentEpisodes"
+            app:destination="@id/fragmentEpisodes" />
+        <action
+            android:id="@+id/action_fragmentCharacters_to_fragmentCharacterDetail"
+            app:destination="@id/fragmentCharacterDetail" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentEpisodes"
+        android:name="org.martellina.rickandmorty.ui.fragments.FragmentEpisodes"
+        android:label="FragmentEpisodes" >
+        <action
+            android:id="@+id/action_fragmentEpisodes_to_fragmentLocations"
+            app:destination="@id/fragmentLocations" />
+        <action
+            android:id="@+id/action_fragmentEpisodes_to_fragmentCharacters"
+            app:destination="@id/fragmentCharacters" />
+        <action
+            android:id="@+id/action_fragmentEpisodes_to_fragmentEpisodeDetail"
+            app:destination="@id/fragmentEpisodeDetail" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentLocations"
+        android:name="org.martellina.rickandmorty.ui.fragments.FragmentLocations"
+        android:label="FragmentLocations" >
+        <action
+            android:id="@+id/action_fragmentLocations_to_fragmentLocationDetail"
+            app:destination="@id/fragmentLocationDetail" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentCharacterDetail"
+        android:name="org.martellina.rickandmorty.ui.fragments.FragmentCharacterDetail"
+        android:label="FragmentCharacterDetail" >
+        <action
+            android:id="@+id/action_fragmentCharacterDetail_to_fragmentEpisodeDetail"
+            app:destination="@id/fragmentEpisodeDetail" />
+        <action
+            android:id="@+id/action_fragmentCharacterDetail_to_fragmentLocationDetail"
+            app:destination="@id/fragmentLocationDetail" />
+        <argument
+            android:name="character"
+            app:argType="org.martellina.rickandmorty.network.model.CharacterInfo" />
+        <action
+            android:id="@+id/action_fragmentCharacterDetail_to_fragmentCharacters"
+            app:destination="@id/fragmentCharacters" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentEpisodeDetail"
+        android:name="org.martellina.rickandmorty.ui.fragments.FragmentEpisodeDetail"
+        android:label="FragmentEpisodeDetail" >
+        <action
+            android:id="@+id/action_fragmentEpisodeDetail_to_fragmentEpisodes"
+            app:destination="@id/fragmentEpisodes" />
+        <action
+            android:id="@+id/action_fragmentEpisodeDetail_to_fragmentCharacterDetail"
+            app:destination="@id/fragmentCharacterDetail" />
+        <argument
+            android:name="episode"
+            app:argType="org.martellina.rickandmorty.network.model.EpisodeInfo" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentLocationDetail"
+        android:name="org.martellina.rickandmorty.ui.fragments.FragmentLocationDetail"
+        android:label="FragmentLocationDetail" >
+        <action
+            android:id="@+id/action_fragmentLocationDetail_to_fragmentLocations"
+            app:destination="@id/fragmentLocations" />
+        <action
+            android:id="@+id/action_fragmentLocationDetail_to_fragmentCharacterDetail"
+            app:destination="@id/fragmentCharacterDetail" />
+        <argument
+            android:name="locationId"
+            app:argType="integer" />
+    </fragment>
 </navigation>
