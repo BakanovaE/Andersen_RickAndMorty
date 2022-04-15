@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 class ViewModelLocations@Inject constructor(private val repository: Repository): ViewModel() {
 
-    var locationsList = MutableLiveData<List<LocationInfo>>()
+    var locationsList = MutableLiveData<List<LocationInfo>?>()
     var isLoading = MutableLiveData<Boolean>()
     var pages = MutableLiveData<Int>()
     var isEmptyFilteredResult = MutableLiveData<Boolean>()

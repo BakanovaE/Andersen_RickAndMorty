@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 class ViewModelCharacters @Inject constructor(private val repository: Repository): ViewModel() {
 
-    var charactersList = MutableLiveData<List<CharacterInfo>>()
+    var charactersList = MutableLiveData<List<CharacterInfo>?>()
     var isLoading = MutableLiveData<Boolean>()
     var pages = MutableLiveData<Int>()
     var isEmptyFilteredResult = MutableLiveData<Boolean>()

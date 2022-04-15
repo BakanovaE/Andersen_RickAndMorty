@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 class ViewModelEpisodes @Inject constructor(private val repository: Repository): ViewModel() {
 
-    var episodesList = MutableLiveData<List<EpisodeInfo>>()
+    var episodesList = MutableLiveData<List<EpisodeInfo>?>()
     var isLoading = MutableLiveData<Boolean>()
     var pages = MutableLiveData<Int>()
     var filter = EpisodesFilter()
